@@ -31,7 +31,7 @@ $orders = $conn->query("
         
         body {
             font-family: Arial, sans-serif;
-            background: #f5f5f5;
+            background: #f9f1f5ff;
             padding: 20px;
         }
         
@@ -49,7 +49,7 @@ $orders = $conn->query("
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
-            border-bottom: 2px solid #667eea;
+            border-bottom: 2px solid #ffb3d9;
             padding-bottom: 20px;
         }
         
@@ -59,7 +59,7 @@ $orders = $conn->query("
         }
         
         .nav a {
-            color: #667eea;
+            color: #d63384;
             text-decoration: none;
             padding: 8px 15px;
             border-radius: 5px;
@@ -67,7 +67,7 @@ $orders = $conn->query("
         }
         
         .nav a:hover {
-            background: #667eea;
+            background: #ffb3d9;
             color: white;
         }
         
@@ -78,8 +78,8 @@ $orders = $conn->query("
         }
         
         th {
-            background: #667eea;
-            color: white;
+            background: #ffb3d9;
+            color: #660033;
             padding: 15px;
             text-align: left;
             font-weight: bold;
@@ -91,7 +91,7 @@ $orders = $conn->query("
         }
         
         tr:hover {
-            background: #f9f9f9;
+            background: rgb(255, 204, 230);
         }
         
         .status-badge {
@@ -120,7 +120,7 @@ $orders = $conn->query("
         .btn {
             display: inline-block;
             padding: 8px 15px;
-            background: #5cb85c;
+            background: #ff66b3;
             color: white;
             text-decoration: none;
             border-radius: 5px;

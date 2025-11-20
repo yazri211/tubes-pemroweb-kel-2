@@ -64,7 +64,7 @@ $items = mysqli_query($conn, "
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
-            border-bottom: 2px solid #667eea;
+            border-bottom: 2px solid #d63384;
             padding-bottom: 20px;
         }
         
@@ -78,7 +78,7 @@ $items = mysqli_query($conn, "
             padding: 20px;
             border-radius: 5px;
             margin-bottom: 20px;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #ffb3d9;
         }
         
         .info-row {
@@ -126,8 +126,8 @@ $items = mysqli_query($conn, "
         }
         
         th {
-            background: #667eea;
-            color: white;
+            background: #ffb3d9;
+            color: #660033;
             padding: 15px;
             text-align: left;
             font-weight: bold;
@@ -158,18 +158,18 @@ $items = mysqli_query($conn, "
         }
         
         .summary-row.total {
-            border-top: 2px solid #667eea;
+            border-top: 2px solid #d63384;
             padding-top: 10px;
             font-size: 20px;
             font-weight: bold;
-            color: #667eea;
+            color: #d63384;
         }
         
         .btn {
             display: inline-block;
             padding: 10px 20px;
-            background: #0275d8;
-            color: white;
+            background: #ffb3d9;
+            color: #660033;
             text-decoration: none;
             border-radius: 5px;
             margin-top: 20px;
@@ -177,7 +177,7 @@ $items = mysqli_query($conn, "
         }
         
         .btn:hover {
-            background: #025aa5;
+            background: #ffb3d9;
         }
     </style>
 </head>
@@ -240,7 +240,7 @@ $items = mysqli_query($conn, "
                 <?php
                 if ($order['status'] === 'completed') {
                     // Check existing review for this user/product/transaction
-                    $check = mysqli_query($conn, "SELECT rating FROM `product_reviews` WHERE user_id = $user_id AND product_id = $prod_id AND transaction_id = $order_id LIMIT 1");
+                    $check = mysqli_query($conn, "SELECT rating FROM product_reviews WHERE user_id = $user_id AND product_id = $prod_id AND transaction_id = $order_id LIMIT 1");
                     if ($check && mysqli_num_rows($check) > 0) {
                         $rv = mysqli_fetch_assoc($check);
                         echo '<strong>Rating Anda:</strong> ' . str_repeat('★', (int)$rv['rating']) . str_repeat('☆', 5-(int)$rv['rating']);

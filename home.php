@@ -654,7 +654,6 @@ $placeholder = 'assets/placeholder.png';
         }
     });
 
-    // CLEAR SEARCH BUTTON — hapus q (dan category) lalu kembali ke tampilan awal
     (function(){
         const input = document.getElementById("searchInput");
         const clearBtn = document.getElementById("clearSearch");

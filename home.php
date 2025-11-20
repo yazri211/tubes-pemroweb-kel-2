@@ -209,6 +209,7 @@ $placeholder = 'assets/placeholder.png';
     .cat-btn{ padding:8px 14px; border-radius:999px; border:1px solid #ffdfe8; background:#fff; color:var(--accent); cursor:pointer; font-weight:600; font-size:14px; white-space:nowrap; }
     .cat-btn.active{ background:var(--accent); color:#fff; border-color:var(--accent) }
 
+    /* DEFAULT GRID: desktop large screens */
     .product { display:grid; grid-template-columns: repeat(4, 1fr); gap: 20px; align-items:stretch; }
     .product-card{ background:#fff; border-radius:14px; box-shadow:var(--card-shadow); overflow:hidden; display:flex; flex-direction:column; transition: transform .18s ease, box-shadow .18s ease; min-height:380px; }
     .product-card:hover{ transform:translateY(-6px); box-shadow:0 20px 40px rgba(255,105,180,0.08) }
@@ -246,68 +247,48 @@ $placeholder = 'assets/placeholder.png';
         margin: 0;
     }
 
-    /* === NEW: ensure consistent card size when there are 2 or 3 products === */
-    @media (min-width: 540px) {
-        .product.count-2,
-        .product.count-3 {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            align-items: flex-start;
-            flex-wrap: nowrap; /* keep them on one row */
-        }
+    /* Tablet & responsive grid rules (UPDATED):
+       - >=1200px : 4 columns (desktop)
+       - 992px - 1199px : 3 columns (large tablet / small laptop)
+       - 768px - 991px : 3 columns (tablet landscape)
+       - 540px - 767px : 2 columns (small tablets & phablets)
+       - 380px - 539px : 2 columns (phones)
+       - <380px : 1 column (very small phones)
+    */
 
-        .product.count-2 .product-card,
-        .product.count-3 .product-card,
-        .product.single .product-card {
-            width: 260px;
-            max-width: 260px;
-            min-width: 240px;
-            margin: 0;
-            flex: 0 0 auto; /* prevent stretching */
-        }
+    /* large tablets / small laptops */
+    @media (max-width: 1199px) and (min-width: 992px) {
+        .product { grid-template-columns: repeat(3, 1fr); gap: 18px; }
+        .product-card { min-height: 360px; }
     }
 
-    /* MOBILE: tampil 2 kartu per baris pada kebanyakan ponsel */
-    @media (max-width: 539px) {
-        .product {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            align-items: start;
-        }
-
-        .product-card {
-            width: 100%;
-            min-height: auto;
-            margin: 0;
-            flex: initial;
-        }
-
-        .img-wrap {
-            aspect-ratio: 4/3;
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 10px;
-        }
-
-        /* search & nav small adjustments */
-        .nav-search { flex:1; }
-        .search-input { width:100%; max-width:none; padding:10px 12px; font-size:14px; }
-        .nav-actions { padding-right: 4px; }
+    /* tablet landscape and regular tablets */
+    @media (max-width: 991px) and (min-width: 768px) {
+        .product { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .product-card { min-height: 360px; }
     }
 
-    /* untuk layar sangat kecil (contoh: <380px) kembali ke 1 kolom agar tetap nyaman */
+    /* small tablets & large phones */
+    @media (max-width: 767px) and (min-width: 540px) {
+        .product { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+        .product-card { min-height: auto; }
+    }
+
+    /* phones (most mobile devices) */
+    @media (max-width: 539px) and (min-width: 380px) {
+        .product { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .product-card { min-height: auto; }
+    }
+
+    /* very small phones -> single column */
     @media (max-width: 379px) {
-        .product {
-            grid-template-columns: repeat(1, 1fr);
-            gap: 10px;
-        }
+        .product { grid-template-columns: repeat(1, 1fr); gap: 10px; }
         .img-wrap { aspect-ratio: 16/9; }
         .card-desc { font-size:13px; min-height:40px; }
         .btn-primary { height:48px; font-size:15px; }
     }
 
-    /* RESPONSIVE - tablet & small desktop */
+    /* RESPONSIVE - other nav adjustments */
     @media (max-width:900px){
         .nav-links{ display:none; }
         .nav-search { flex:1; justify-content:flex-end; }
@@ -381,8 +362,6 @@ $placeholder = 'assets/placeholder.png';
 
         .mobile-menu { display: none; }
 
-        /* product layout: one column, card full width with comfortable spacing for very small phones */
-        /* NOTE: breakpoint 440px kept for other nav adjustments; actual product column behavior controlled by 539px and 379px blocks above */
         .product-card { min-height: auto; border-radius:12px; }
         .img-wrap { aspect-ratio: 16/9; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; }
 

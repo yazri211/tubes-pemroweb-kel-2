@@ -438,6 +438,19 @@ $placeholder = 'assets/placeholder.png';
         /* slight adjustment to base html on very small screens for legibility */
         html { font-size: clamp(11px, calc(9px + 1.0vw), 14px); }
     }
+    .hero {
+        position: relative;
+        width: 100%;
+        height: 510px;
+        overflow: hidden;
+    }
+    .hero-img {
+        width: 100%;
+        height: 88%;
+        margin-top: 20px;
+        object-fit: cover;  
+        filter: brightness(60%);
+    }
 
     </style>
 </head>
@@ -449,7 +462,7 @@ $placeholder = 'assets/placeholder.png';
             <div class="nav-left" aria-hidden="false">
                 <div class="brand" aria-hidden="false">
                     <div class="brand-logo" aria-hidden="true">
-                        <img src="assets/logo.png" alt="Beauty Shop">
+                        <img src="assets/logo.jpg" alt="Beauty Shop">
                     </div>
                     <div>
                         <div class="brand-title">Beauty Shop</div>
@@ -550,6 +563,10 @@ $placeholder = 'assets/placeholder.png';
                 </li>
             <?php endforeach; ?>
         </ul>
+       
+        <section class="hero">
+            <img class="hero-img" src="assets/iklan.jpg" alt="Hero Banner">
+        </section>
 
         <div class="product" aria-live="polite">
             <?php

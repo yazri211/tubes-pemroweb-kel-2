@@ -2,6 +2,19 @@
 session_start();
 include 'conn.php';
 
+//
+// ------------------ DETEKSI LOGIN UNTUK FRONT-END ------------------
+//
+$isLoggedIn = false;
+if (!empty($_SESSION['user_id'])) {
+    $isLoggedIn = true;
+} elseif (!empty($_SESSION['user']) && is_array($_SESSION['user']) && !empty($_SESSION['user']['id'])) {
+    $isLoggedIn = true;
+}
+
+// ==================================================================
+
+
 $search = isset($_GET['q']) ? trim($_GET['q']) : '';
 $category = isset($_GET['category']) ? trim($_GET['category']) : '';
 
@@ -69,6 +82,22 @@ $placeholder = 'assets/placeholder.png';
         --transition-medium: 220ms;
     }
 
+    /* ==========================
+       FLUID TYPOGRAPHY (clamp)
+       --------------------------
+       - Base font-size is fluid using clamp()
+       - Most sizes use rem so they scale automatically
+    */
+    html {
+      /* fallback min 12px, preferred scale with viewport, max 16px */
+      font-size: clamp(12px, calc(10px + 1.2vw), 16px);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* make body use rem-based sizing (1rem == html font-size) */
+    body { font-size: 1rem; }
+
     *, *::before, *::after { box-sizing: border-box; }
     html,body{
         height:100%;
@@ -92,146 +121,142 @@ $placeholder = 'assets/placeholder.png';
         right: 0;
         z-index: 999; /* high so it stays above content */
         background: #ffffff;
-        box-shadow: 0 8px 24px rgba(18,18,18,0.04);
-        border-bottom: 1px solid rgba(0,0,0,0.04);
+        box-shadow: 0 0.5rem 1.5rem rgba(18,18,18,0.04);
+        border-bottom: 0.0625rem solid rgba(0,0,0,0.04);
     }
     .nav-inner{
-        max-width:var(--max-w); margin:0 auto; padding:8px 12px; height:var(--nav-height);
-        display:flex; align-items:center; justify-content:space-between; gap:16px;
+        max-width:var(--max-w); margin:0 auto; padding:0.5rem 0.75rem; height:var(--nav-height);
+        display:flex; align-items:center; justify-content:space-between; gap:1rem;
         flex-wrap:wrap;
     }
-    .nav-left{ display:flex; align-items:center; gap:12px; flex:0 1 auto; min-width:0; }
-    .brand{ display:flex; align-items:center; gap:10px; flex-shrink:0; }
-    .brand-logo{ width:52px; height:52px; border-radius:10px; overflow:hidden; display:inline-flex; align-items:center; justify-content:center; background:linear-gradient(135deg,var(--accent-2),var(--accent)); box-shadow:0 6px 18px rgba(255,105,180,0.08); }
+    .nav-left{ display:flex; align-items:center; gap:0.75rem; flex:0 1 auto; min-width:0; }
+    .brand{ display:flex; align-items:center; gap:0.625rem; flex-shrink:0; }
+    .brand-logo{ width:3.25rem; height:3.25rem; border-radius:0.625rem; overflow:hidden; display:inline-flex; align-items:center; justify-content:center; background:linear-gradient(135deg,var(--accent-2),var(--accent)); box-shadow:0 0.375rem 1.125rem rgba(255,105,180,0.08); }
     .brand-logo img{ width:100%; height:100%; object-fit:cover; display:block; }
-    .brand-title{ font-weight:800; font-size:18px; color:var(--accent); line-height:1; }
-    .brand-sub{ font-size:12px; color:#8a8a8a; margin-top:2px; }
+    .brand-title{ font-weight:800; font-size:1.125rem; color:var(--accent); line-height:1; }
+    .brand-sub{ font-size:0.75rem; color:#8a8a8a; margin-top:0.125rem; }
 
     .nav-links{ display:none; }
 
-    .nav-actions{ display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-left:auto; margin-right:0; padding-right:4px; flex-shrink:0; }
+    .nav-actions{ display:flex; gap:0.625rem; align-items:center; justify-content:flex-end; margin-left:auto; margin-right:0; padding-right:0.25rem; flex-shrink:0; }
 
     .cart-btn{
         position:relative;
-        width:44px;
-        height:44px;
+        width:2.75rem;
+        height:2.75rem;
         border-radius:50%;
         display:inline-flex;
         align-items:center;
         justify-content:center;
         background:#fff;
-        border:2px solid var(--accent);
+        border:0.125rem solid var(--accent);
         color:var(--accent);
-        font-size:18px;
+        font-size:1.125rem;
         cursor:pointer;
         transition: transform .12s ease, background .12s ease, color .12s ease;
-        box-shadow: 0 6px 18px rgba(255,105,180,0.06);
+        box-shadow: 0 0.375rem 1.125rem rgba(255,105,180,0.06);
     }
-    .cart-btn img{ width:20px; height:20px; display:block; }
+    .cart-btn img{ width:1.25rem; height:1.25rem; display:block; }
     .cart-btn:hover, .cart-btn:focus {
         background:var(--accent);
         color:#fff;
-        transform:translateY(-3px);
+        transform:translateY(-0.1875rem);
         outline:none;
     }
     .cart-count{
-        position:absolute; top:-6px; right:-6px; background:var(--accent); color:#fff; font-size:12px; padding:4px 7px; border-radius:999px; box-shadow:0 6px 14px rgba(255,77,148,0.12);
+        position:absolute; top:-0.375rem; right:-0.375rem; background:var(--accent); color:#fff; font-size:0.75rem; padding:0.25rem 0.4375rem; border-radius:999px; box-shadow:0 0.375rem 0.875rem rgba(255,77,148,0.12);
         line-height:1;
     }
 
-    .profile-btn{ width:44px; height:44px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; background:#fff; border:2px solid var(--accent); color:var(--accent); font-size:18px; cursor:pointer; transition: transform .12s ease, background .12s ease, color .12s ease; box-shadow: 0 6px 18px rgba(255,105,180,0.06); position:relative; }
-    .profile-btn img{ width:20px; height:20px; border-radius:50%; display:block; object-fit:cover; }
-    .profile-btn:hover, .profile-btn:focus { background:var(--accent); color:#fff; transform:translateY(-3px); outline:none; }
+    .profile-btn{ width:2.75rem; height:2.75rem; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; background:#fff; border:0.125rem solid var(--accent); color:var(--accent); font-size:1.125rem; cursor:pointer; transition: transform .12s ease, background .12s ease, color .12s ease; box-shadow: 0 0.375rem 1.125rem rgba(255,105,180,0.06); position:relative; }
+    .profile-btn img{ width:1.25rem; height:1.25rem; border-radius:50%; display:block; object-fit:cover; }
+    .profile-btn:hover, .profile-btn:focus { background:var(--accent); color:#fff; transform:translateY(-0.1875rem); outline:none; }
 
-    .profile-dropdown{ position:absolute; top:calc(var(--nav-height) + 12px); right:6px; min-width:180px; background:#fff; border-radius:12px; box-shadow:0 14px 40px rgba(18,18,18,0.12); border:1px solid rgba(0,0,0,0.04); padding:6px; display:none; z-index:1001; }
+    .profile-dropdown{ position:absolute; top:calc(var(--nav-height) + 0.75rem); right:0.375rem; min-width:11.25rem; background:#fff; border-radius:0.75rem; box-shadow:0 0.875rem 2.5rem rgba(18,18,18,0.12); border:0.0625rem solid rgba(0,0,0,0.04); padding:0.375rem; display:none; z-index:1001; }
     .profile-dropdown.show{ display:block; }
-    .profile-dropdown a { display:flex; gap:10px; padding:10px 12px; align-items:center; border-radius:8px; color:#222; font-weight:600; text-decoration:none; }
+    .profile-dropdown a { display:flex; gap:0.625rem; padding:0.625rem 0.75rem; align-items:center; border-radius:0.5rem; color:#222; font-weight:600; text-decoration:none; }
     .profile-dropdown a:hover, .profile-dropdown a:focus { background: rgba(255,77,148,0.06); color:var(--accent); outline:none; }
 
-    .mobile-menu{ display:none; width:100%; background:var(--glass); padding:12px 18px; border-top:1px solid rgba(0,0,0,0.03) }
+    .mobile-menu{ display:none; width:100%; background:var(--glass); padding:0.75rem 1.125rem; border-top:0.0625rem solid rgba(0,0,0,0.03) }
 
     /* SEARCH inside nav-actions */
-    .nav-search { display:flex; align-items:center; gap:8px; position:relative; margin-left:0; }
+    .nav-search { display:flex; align-items:center; gap:0.5rem; position:relative; margin-left:0; }
     .search-input {
-        width: 220px;
-        max-width: min(320px, calc(var(--max-w) - 260px));
-        padding: 8px 12px;
-        border-radius: 10px;
-        border: 1px solid #ececec;
+        width: 13.75rem;
+        max-width: min(20rem, calc(var(--max-w) - 16.25rem));
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.625rem;
+        border: 0.0625rem solid #ececec;
         background: #fff;
-        box-shadow: 0 4px 10px rgba(14,14,14,0.03);
+        box-shadow: 0 0.25rem 0.625rem rgba(14,14,14,0.03);
         transition: width .24s ease, box-shadow .18s ease, border-color .18s ease;
-        font-size: 14px;
+        font-size: 0.875rem;
         outline: none;
     }
     .search-input:focus, .nav-search.expanded .search-input { 
-        width: 320px;
-        box-shadow: 0 12px 28px rgba(18,18,18,0.06); 
+        width: 20rem;
+        box-shadow: 0 0.75rem 1.75rem rgba(18,18,18,0.06); 
         border-color: rgba(255,77,148,0.12); 
     }
-    .nav-search button[type="submit"]{ padding:9px 14px; border-radius:10px; background:var(--accent); color:#fff; font-weight:700; cursor:pointer; box-shadow:0 8px 20px rgba(255,77,148,0.06); }
+    .nav-search button[type="submit"]{ padding:0.5625rem 0.875rem; border-radius:0.625rem; background:var(--accent); color:#fff; font-weight:700; cursor:pointer; box-shadow:0 0.5rem 1.25rem rgba(255,77,148,0.06); }
 
     /* clear-search */
     .clear-search {
         position: absolute;
-        right: calc(12px + 48px + 8px);
+        right: calc(0.75rem + 3rem + 0.5rem); /* converted from 12px + 48px + 8px */
         top: 50%;
         transform: translateY(-50%);
-        font-size: 18px;
+        font-size: 1.125rem;
         cursor: pointer;
         color: #999;
         display: none;
         user-select: none;
         line-height:1;
-        padding:6px;
-        border-radius:8px;
+        padding:0.375rem;
+        border-radius:0.5rem;
     }
     .clear-search:hover, .clear-search:focus { color: var(--accent); background: rgba(255,77,148,0.04); }
-    .clear-search:focus { outline: 2px solid rgba(255,77,148,0.12); }
-
-    @media (max-width:900px){
-        .clear-search { right: calc(12px + 44px + 6px); }
-    }
+    .clear-search:focus { outline: 0.125rem solid rgba(255,77,148,0.12); }
 
     /* rest of page */
     main.container{ 
         max-width:var(--max-w); 
-        margin:18px auto; 
-        padding-left:18px; 
-        padding-right:18px; 
-        padding-bottom:60px;
+        margin:1.125rem auto; 
+        padding-left:1.125rem; 
+        padding-right:1.125rem; 
+        padding-bottom:3.75rem;
         /* reserve space for fixed header */
-        padding-top: calc(var(--nav-height) + 18px);
+        padding-top: calc(var(--nav-height) + 1.125rem);
     }
-    .categories{ display:flex; flex-wrap:nowrap; gap:10px; margin:8px 0 18px; padding:0; list-style:none; overflow-x:auto; -webkit-overflow-scrolling:touch; }
-    .categories::-webkit-scrollbar { height:6px; }
+    .categories{ display:flex; flex-wrap:nowrap; gap:0.625rem; margin:0.5rem 0 1.125rem; padding:0; list-style:none; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    .categories::-webkit-scrollbar { height:0.375rem; }
     .categories::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius:999px; }
-    .cat-btn{ padding:8px 14px; border-radius:999px; border:1px solid #ffdfe8; background:#fff; color:var(--accent); cursor:pointer; font-weight:600; font-size:14px; white-space:nowrap; }
+    .cat-btn{ padding:0.5rem 0.875rem; border-radius:999px; border:0.0625rem solid #ffdfe8; background:#fff; color:var(--accent); cursor:pointer; font-weight:600; font-size:0.875rem; white-space:nowrap; }
     .cat-btn.active{ background:var(--accent); color:#fff; border-color:var(--accent) }
 
     /* DEFAULT GRID: desktop large screens */
-    .product { display:grid; grid-template-columns: repeat(4, 1fr); gap: 20px; align-items:stretch; }
-    .product-card{ background:#fff; border-radius:14px; box-shadow:var(--card-shadow); overflow:hidden; display:flex; flex-direction:column; transition: transform .18s ease, box-shadow .18s ease; min-height:380px; }
-    .product-card:hover{ transform:translateY(-6px); box-shadow:0 20px 40px rgba(255,105,180,0.08) }
+    .product { display:grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; align-items:stretch; }
+    .product-card{ background:#fff; border-radius:0.875rem; box-shadow:var(--card-shadow); overflow:hidden; display:flex; flex-direction:column; transition: transform .18s ease, box-shadow .18s ease; min-height:23.75rem; }
+    .product-card:hover{ transform:translateY(-0.375rem); box-shadow:0 1.25rem 2.5rem rgba(255,105,180,0.08) }
     .img-wrap{ position:relative; aspect-ratio:4/3; overflow:hidden; background:linear-gradient(180deg,#fff7fa 0%, #fff0f5 100%); display:flex; align-items:center; justify-content:center; }
     .img-wrap img{ width:100%; height:100%; object-fit:cover; display:block; transition: transform .45s ease; }
     .product-card:hover .img-wrap img{ transform:scale(1.05); }
 
-    .card-body{ padding:16px; display:flex; flex-direction:column; gap:8px; flex:1 1 auto; }
-    .card-title{ font-size:16px; font-weight:800; color:#222; line-height:1.2; min-height:34px; margin:0; }
-    .card-desc{ font-size:13px; color:var(--muted); min-height:30px; margin:0; overflow:hidden; margin-top:4px; }
+    .card-body{ padding:1rem; display:flex; flex-direction:column; gap:0.5rem; flex:1 1 auto; }
+    .card-title{ font-size:1rem;  font-weight:800; color:#222; line-height:1.2; min-height:2.125rem; margin:0; }
+    .card-desc{ font-size:0.8125rem; color:var(--muted); min-height:1.875rem; margin:0; overflow:hidden; margin-top:0.25rem; }
 
-    .price-row{ display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:6px; }
-    .price{ font-size:17px; font-weight:900; color:var(--accent); white-space:nowrap; }
-    .old-price{ font-size:13px; color:#b4b4b4; text-decoration:line-through; }
+    .price-row{ display:flex; align-items:center; justify-content:space-between; gap:0.5rem; margin-top:0.375rem; }
+    .price{ font-size:1.0625rem; font-weight:900; color:var(--accent); white-space:nowrap; }
+    .old-price{ font-size:0.8125rem; color:#b4b4b4; text-decoration:line-through; }
 
-    .card-actions{ display:flex; gap:10px; margin-top:auto; padding-top:6px; align-items:center; }
-    .btn{ flex:1; padding:12px 14px; border-radius:12px; border:none; cursor:pointer; font-weight:800; font-size:14px; }
-    .btn-primary{ background:var(--accent); color:#fff; box-shadow:0 8px 20px rgba(255,77,148,0.06); height:48px; display:inline-flex; align-items:center; justify-content:center; }
-    .btn-ghost{ background:#fff; border:1px solid #ffdfe8; color:var(--accent); min-width:52px; height:44px; display:inline-flex; align-items:center; justify-content:center; border-radius:12px; }
-    .icon-btn{ width:48px; min-width:48px; height:44px; border-radius:12px; font-size:18px; }
+    .card-actions{ display:flex; gap:0.625rem; margin-top:auto; padding-top:0.375rem; align-items:center; }
+    .btn{ flex:1; padding:0.75rem 0.875rem; border-radius:0.75rem; border:none; cursor:pointer; font-weight:800; font-size:0.875rem; }
+    .btn-primary{ background:var(--accent); color:#fff; box-shadow:0 0.5rem 1.25rem rgba(255,77,148,0.06); height:3rem; display:inline-flex; align-items:center; justify-content:center; }
+    .btn-ghost{ background:#fff; border:0.0625rem solid #ffdfe8; color:var(--accent); min-width:3.25rem; height:2.75rem; display:inline-flex; align-items:center; justify-content:center; border-radius:0.75rem; }
+    .icon-btn{ width:3rem; min-width:3rem; height:2.75rem; border-radius:0.75rem; font-size:1.125rem; }
 
-    .toast { position: fixed; right: 20px; bottom: 20px; background: var(--toast-bg); color: #fff; padding: 10px 14px; border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); z-index: 9999; opacity: 0; transform: translateY(8px); transition: opacity .22s ease, transform .22s ease; pointer-events: none; font-weight:700; }
+    .toast { position: fixed; right: 1.25rem; bottom: 1.25rem; background: var(--toast-bg); color: #fff; padding: 0.625rem 0.875rem; border-radius: 0.625rem; box-shadow: 0 0.5rem 1.875rem rgba(0,0,0,0.3); z-index: 9999; opacity: 0; transform: translateY(8px); transition: opacity .22s ease, transform .22s ease; pointer-events: none; font-weight:700; }
     .toast.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
     /* Keep single product card same visual size as multiple cards (desktop/tablet) */
@@ -241,9 +266,9 @@ $placeholder = 'assets/placeholder.png';
         align-items: flex-start;
     }
     .product.single .product-card {
-        width: 260px;
-        max-width: 260px;
-        min-width: 240px;
+        width: 16.25rem;
+        max-width: 16.25rem;
+        min-width: 15rem;
         margin: 0;
     }
 
@@ -258,53 +283,86 @@ $placeholder = 'assets/placeholder.png';
 
     /* large tablets / small laptops */
     @media (max-width: 1199px) and (min-width: 992px) {
-        .product { grid-template-columns: repeat(3, 1fr); gap: 18px; }
-        .product-card { min-height: 360px; }
+        .product { grid-template-columns: repeat(3, 1fr); gap: 1.125rem; }
+        .product-card { min-height:22.5rem; }
     }
 
     /* tablet landscape and regular tablets */
     @media (max-width: 991px) and (min-width: 768px) {
-        .product { grid-template-columns: repeat(3, 1fr); gap: 16px; }
-        .product-card { min-height: 360px; }
+        .product { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        .product-card { min-height:22.5rem; }
     }
 
     /* small tablets & large phones */
     @media (max-width: 767px) and (min-width: 540px) {
-        .product { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+        .product { grid-template-columns: repeat(2, 1fr); gap: 0.875rem; }
         .product-card { min-height: auto; }
     }
 
     /* phones (most mobile devices) */
     @media (max-width: 539px) and (min-width: 380px) {
-        .product { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .product { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
         .product-card { min-height: auto; }
     }
 
     /* very small phones -> single column */
     @media (max-width: 379px) {
-        .product { grid-template-columns: repeat(1, 1fr); gap: 10px; }
+        .product { grid-template-columns: repeat(1, 1fr); gap: 0.625rem; }
         .img-wrap { aspect-ratio: 16/9; }
-        .card-desc { font-size:13px; min-height:40px; }
-        .btn-primary { height:48px; font-size:15px; }
+        .card-desc { font-size:0.8125rem; min-height:2.5rem; }
+        .btn-primary { height:3rem; font-size:0.9375rem; }
     }
 
     /* RESPONSIVE - other nav adjustments */
     @media (max-width:900px){
         .nav-links{ display:none; }
         .nav-search { flex:1; justify-content:flex-end; }
-        .search-input { width:140px; }
-        .search-input:focus, .nav-search.expanded .search-input { width:100%; max-width: 480px; }
-        .profile-dropdown { right:8px; top: calc(var(--nav-height) + 8px); }
+        .search-input { width:8.75rem; }
+        .search-input:focus, .nav-search.expanded .search-input { width:100%; max-width: 30rem; }
+        .profile-dropdown { right:0.5rem; top: calc(var(--nav-height) + 0.5rem); }
         .mobile-menu{ display:block; }
     }
 
     /* MOBILE SMALLER LAYOUT (improved) */
+
+    /* Fix for mid-small screens: 441px — 551px
+       Addresses navbar wrapping / misalignment issues */
+    @media (min-width:441px) and (max-width:551px) {
+        .nav-inner {
+            /* allow a bit more vertical room and center items */
+            padding: 0.5rem 0.75rem;
+            height: auto;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .brand-title { font-size: 1rem; }
+        .brand-sub { display: none; }
+
+        /* make search take majority of available space but keep buttons visible */
+        .nav-actions { display:flex; align-items:center; gap:0.5rem; width:100%; }
+        .nav-search { order: 1; flex: 1 1 58%; max-width: 42rem; }
+        .search-input { width: 12.5rem; max-width: 100%; }
+        .nav-search button[type="submit"]{ padding:0.5rem 0.75rem; }
+
+        /* keep cart/profile to the right but reduce chance of wrapping */
+        .profile-wrapper { order: 2; margin-left: 0.5rem; }
+        .cart-btn { order: 3; margin-left: auto; }
+
+        /* slightly reduce icon sizes so they fit nicely */
+        .cart-btn, .profile-btn { width:2.5rem; height:2.5rem; font-size:1rem; }
+        .cart-btn img, .profile-btn img { width:1rem; height:1rem; }
+
+        /* avoid the clear icon overlapping on this range */
+        .clear-search { right: 4.25rem; }
+    }
+
     @media (max-width:440px){
         .nav-inner {
             flex-wrap:wrap;
             align-items:center;
-            padding:8px 10px;
-            gap:8px;
+            padding:0.5rem 0.625rem;
+            gap:0.5rem;
             height: auto;
         }
 
@@ -314,14 +372,14 @@ $placeholder = 'assets/placeholder.png';
             min-width: 0;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0.625rem;
         }
         .brand-logo {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.625rem;
         }
-        .brand-title { font-size: 15px; }
+        .brand-title { font-size: 0.9375rem; }
         .brand-sub { display: none; }
 
         /* actions container spans full width */
@@ -331,7 +389,7 @@ $placeholder = 'assets/placeholder.png';
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 8px;
+            gap: 0.5rem;
             padding: 0;
         }
 
@@ -341,42 +399,57 @@ $placeholder = 'assets/placeholder.png';
             flex: 1 1 auto;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 0.5rem;
             margin: 0;
         }
-        .nav-search form { width: 100%; display:flex; gap:8px; align-items:center; }
-        .search-input { width: 100%; max-width: none; padding:10px 12px; font-size:15px; border-radius:10px; }
+        .nav-search form { width: 100%; display:flex; gap:0.5rem; align-items:center; }
+        .search-input { width: 100%; max-width: none; padding:0.625rem 0.75rem; font-size:0.9375rem; border-radius:0.625rem; }
 
         /* make submit button bigger on mobile for touch */
-        .nav-search button[type="submit"] { padding:10px 14px; font-size:15px; border-radius:10px; }
+        .nav-search button[type="submit"] { padding:0.625rem 0.875rem; font-size:0.9375rem; border-radius:0.625rem; }
 
         /* clear-search reposition to be closer to the right edge on small screens */
-        .clear-search { right: 72px; font-size:18px; padding:8px; }
+        .clear-search { right: 4.5rem; font-size:1.125rem; padding:0.5rem; }
 
         /* cart + profile grouped to the right - enlarge slightly for finger taps */
-        .cart-btn { order: 2; width:44px; height:44px; flex: 0 0 auto; border-width:2px; }
+        .cart-btn { order: 2; width:2.75rem; height:2.75rem; flex: 0 0 auto; border-width:0.125rem; }
         .profile-wrapper { order: 3; flex: 0 0 auto; display: flex; align-items: center; }
-        .profile-btn { order: 3; width:44px; height:44px; }
+        .profile-btn { order: 3; width:2.75rem; height:2.75rem; }
 
-        .cart-count { top: -6px; right: -6px; padding: 3px 6px; font-size: 11px; }
+        .cart-count { top: -0.375rem; right: -0.375rem; padding: 0.1875rem 0.375rem; font-size: 0.6875rem; }
 
         .mobile-menu { display: none; }
 
-        .product-card { min-height: auto; border-radius:12px; }
-        .img-wrap { aspect-ratio: 16/9; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; }
+        .product-card { min-height: auto; border-radius:0.75rem; }
+        .img-wrap { aspect-ratio: 16/9; border-bottom-left-radius: 0.625rem; border-bottom-right-radius: 0.625rem; }
 
-        .card-body { padding:14px; gap:8px; }
-        .card-title { font-size:16px; }
-        .card-desc { font-size:14px; min-height:40px; }
+        .card-body { padding:0.875rem; gap:0.5rem; }
+        .card-title { font-size:1rem; }
+        .card-desc { font-size:0.875rem; min-height:2.5rem; }
 
-        .btn-primary { height:50px; font-size:16px; border-radius:12px; }
-        .btn-ghost { height:50px; width:50px; border-radius:12px; }
+        .btn-primary { height:3.125rem; font-size:1rem; border-radius:0.75rem; }
+        .btn-ghost { height:3.125rem; width:3.125rem; border-radius:0.75rem; }
     }
 
     @media (max-width:360px){
-        main.container { padding-left:12px; padding-right:12px; }
-        .search-input { font-size:14px; padding:10px; }
-        .btn-primary { height:48px; font-size:15px; }
+        main.container { padding-left:0.75rem; padding-right:0.75rem; }
+        .search-input { font-size:0.875rem; padding:0.625rem; }
+        .btn-primary { height:3rem; font-size:0.9375rem; }
+        /* slight adjustment to base html on very small screens for legibility */
+        html { font-size: clamp(11px, calc(9px + 1.0vw), 14px); }
+    }
+    .hero {
+        position: relative;
+        width: 100%;
+        height: 510px;
+        overflow: hidden;
+    }
+    .hero-img {
+        width: 100%;
+        height: 88%;
+        margin-top: 20px;
+        object-fit: cover;  
+        filter: brightness(60%);
     }
 
     </style>
@@ -389,7 +462,7 @@ $placeholder = 'assets/placeholder.png';
             <div class="nav-left" aria-hidden="false">
                 <div class="brand" aria-hidden="false">
                     <div class="brand-logo" aria-hidden="true">
-                        <img src="assets/logo.png" alt="Beauty Shop">
+                        <img src="assets/logo.jpg" alt="Beauty Shop">
                     </div>
                     <div>
                         <div class="brand-title">Beauty Shop</div>
@@ -445,21 +518,19 @@ $placeholder = 'assets/placeholder.png';
                     </button>
 
                     <div id="profileDropdown" class="profile-dropdown" role="menu" aria-labelledby="profileBtn">
-                        <a href="home.php" role="menuitem" tabindex="0">🏠 Home</a>
-                        <a href="order/order_history.php" role="menuitem" tabindex="0">📦 Pesanan Saya</a>
-                        <a href="auth/logout.php" role="menuitem" tabindex="0">🔓 Logout</a>
+                        <?php if ($isLoggedIn): ?>
+                            <a href="home.php" role="menuitem" tabindex="0">🏠 Home</a>
+                            <a href="order/order_history.php" role="menuitem" tabindex="0">📦 Pesanan Saya</a>
+                            <a href="auth/logout.php" role="menuitem" tabindex="0">🔓 Logout</a>
+                        <?php else: ?>
+                            <!-- Jika belum login: hanya tampil opsi Login.
+                                 Kita beri id agar JS dapat menambahkan return param saat diklik -->
+                            <a id="loginMenu" href="auth/login.php" role="menuitem" tabindex="0">🔐 Login</a>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
 
-            <!-- Optional mobile menu (kept for fallback) -->
-            <div id="mobileMenu" class="mobile-menu" role="region" aria-hidden="true">
-                <div style="display:flex;flex-direction:column;gap:8px">
-                    <a href="home.php" style="padding:10px;border-radius:8px;">Home</a>
-                    <a href="order/order_history.php" style="padding:10px;border-radius:8px;">Pesanan Saya</a>
-                    <a href="cart/cart.php" style="padding:10px;border-radius:8px;">Keranjang</a>
-                    <a href="auth/logout.php" style="padding:10px;border-radius:8px;">Logout</a>
-                </div>
             </div>
         </div>
     </header>
@@ -492,6 +563,10 @@ $placeholder = 'assets/placeholder.png';
                 </li>
             <?php endforeach; ?>
         </ul>
+       
+        <section class="hero">
+            <img class="hero-img" src="assets/iklan.jpg" alt="Hero Banner">
+        </section>
 
         <div class="product" aria-live="polite">
             <?php
@@ -536,7 +611,12 @@ $placeholder = 'assets/placeholder.png';
                             <div class="card-actions">
                                 <button class="btn btn-primary" onclick="location.href='checkout/checkout.php?product_id=<?php echo (int)$card['id']; ?>'">Beli sekarang</button>
 
-                                <button class="btn btn-ghost icon-btn add-to-cart" data-id="<?php echo (int)$card['id']; ?>" aria-label="Tambah ke keranjang">
+                                <!-- TOMBOL: tambahkan data-logged -->
+                                <button class="btn btn-ghost icon-btn add-to-cart"
+                                        data-id="<?php echo (int)$card['id']; ?>"
+                                        data-logged="<?php echo $isLoggedIn ? '1' : '0'; ?>"
+                                        aria-label="Tambah ke keranjang"
+                                        title="Tambah ke keranjang">
                                     🛒
                                 </button>
                             </div>
@@ -573,7 +653,8 @@ $placeholder = 'assets/placeholder.png';
     // update cart count (calls server endpoint that returns a number)
     function updateCartCount() {
         fetch("cart/cart_count.php", {
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            credentials: 'same-origin'
         })
             .then(response => response.text())
             .then(data => {
@@ -585,29 +666,94 @@ $placeholder = 'assets/placeholder.png';
     // initial load
     updateCartCount();
 
-    // add-to-cart (direct, no confirm)
+    // helper to get current path + query for return param
+    function currentPathWithQuery(){
+        try {
+            return window.location.pathname + window.location.search;
+        } catch (e) {
+            return window.location.href;
+        }
+    }
+
+    // If loginMenu exists (not logged-in state), attach return param to its href on click
+    (function(){
+        const loginMenu = document.getElementById('loginMenu');
+        if (!loginMenu) return;
+        loginMenu.addEventListener('click', function(e){
+            // we add return param to href so user returns after login
+            // If user used Ctrl/Meta to open in new tab, default behavior will still include the href we set.
+            const returnTo = encodeURIComponent(currentPathWithQuery());
+            const base = 'auth/login.php';
+            // preserve existing search if any (unlikely), but replace for safety
+            loginMenu.href = base + '?return=' + returnTo;
+            // allow navigation to proceed
+        });
+    })();
+
+    // add-to-cart handler (POST, checks data-logged, direct redirect if not logged)
     document.addEventListener('click', function (e) {
         const btn = e.target.closest('.add-to-cart');
         if (!btn) return;
         const productId = btn.dataset.id;
         if (!productId) return;
 
+        const logged = btn.getAttribute('data-logged') === '1';
+
+        if (!logged) {
+            // langsung redirect ke halaman login tanpa toast/delay
+            const returnTo = encodeURIComponent(currentPathWithQuery());
+            window.location.href = 'auth/login.php?return=' + returnTo;
+            return;
+        }
+
         // visual feedback
         btn.disabled = true;
         btn.style.opacity = '0.6';
 
-        fetch("cart/cart_add.php?id=" + encodeURIComponent(productId), {
-            method: 'GET',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        // send POST request
+        const form = new URLSearchParams();
+        form.append('id', productId);
+        // jika mau qty, tambahkan: form.append('qty', '1');
+
+        fetch('cart/cart_add.php', {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            body: form.toString(),
+            credentials: 'same-origin'
         })
-        .then(resp => resp.text())
-        .then(text => {
-            showToast('Produk ditambahkan ke keranjang');
-            updateCartCount();
+        .then(response => {
+            if (response.status === 401) {
+                // jika server masih menganggap unauthorized, arahkan ke login
+                const returnTo = encodeURIComponent(currentPathWithQuery());
+                window.location.href = 'auth/login.php?return=' + returnTo;
+                throw new Error('Unauthorized');
+            }
+            if (!response.ok) {
+                return response.json().then(j => { throw new Error(j.message || 'Server error'); });
+            }
+            return response.json();
+        })
+        .then(json => {
+            if (json && json.status === 'ok') {
+                showToast(json.message || 'Produk ditambahkan ke keranjang');
+                if (json.cart_count !== undefined) {
+                    const el = document.getElementById('cart-count');
+                    if (el) el.innerText = json.cart_count;
+                } else {
+                    updateCartCount();
+                }
+            } else {
+                showToast(json.message || 'Gagal menambahkan ke keranjang');
+            }
         })
         .catch(err => {
-            console.error('Gagal menambah keranjang:', err);
-            showToast('Gagal menambahkan ke keranjang');
+            if (err.message !== 'Unauthorized') {
+                console.error('Gagal menambah keranjang:', err);
+                showToast('Gagal menambahkan ke keranjang');
+            }
         })
         .finally(() => {
             setTimeout(() => { btn.disabled = false; btn.style.opacity = ''; }, 600);

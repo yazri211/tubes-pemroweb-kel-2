@@ -62,7 +62,7 @@ if ($result === false) {
         border-bottom: 1px solid #ffcce6;
     }
     th {
-        background: #ffb3d9;
+        background: rgba(255, 179, 217, 1);
         color: #660033;
         font-size: 15px;
     }

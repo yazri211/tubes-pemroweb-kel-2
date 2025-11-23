@@ -89,6 +89,7 @@ $products = $conn->query("SELECT id, name, price, description, image, category F
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kelola Produk</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -97,162 +98,292 @@ $products = $conn->query("SELECT id, name, price, description, image, category F
         }
         
         body {
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
+            font-family: 'Poppins', Arial, sans-serif;
+            background: #fff7fb;
+            min-height: 100vh;
             padding: 20px;
+            color: #333;
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
         }
         
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 20px;
+            margin-bottom: 40px;
+            border-bottom: 3px solid #ff6bb5;
+            padding-bottom: 25px;
+            background: #ff6bb5;
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
         }
         
         .header h1 {
-            color: #333;
-            font-size: 24px;
+            font-size: 28px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         
         .nav {
             display: flex;
-            gap: 15px;
+            gap: 20px;
         }
         
         .nav a {
-            color: #667eea;
+            color: white;
             text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            transition: background 0.3s;
+            padding: 12px 20px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            font-weight: 500;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
         .nav a:hover {
-            background: #667eea;
-            color: white;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .nav a:last-child {
+            background: #b43074ff;
+        }
+        
+        .nav a:last-child:hover {
+            background: #65143eff;
         }
         
         .section-title {
-            font-size: 18px;
-            margin: 30px 0 15px 0;
-            color: #333;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
+            font-size: 22px;
+            margin: 40px 0 20px 0;
+            color: #ff6bb5;
+            border-bottom: 2px solid #ffb3d9;
+            padding-bottom: 15px;
+            font-weight: 600;
         }
         
         .form-group {
             display: grid;
-            gap: 15px;
-            margin-bottom: 20px;
-            padding: 20px;
-            background: #f9f9f9;
-            border-radius: 5px;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: linear-gradient(135deg, #fff5f9 0%, #ffebf2 100%);
+            border-radius: 15px;
+            border: 1px solid #ffb3d9;
+            box-shadow: 0 5px 15px rgba(255, 179, 217, 0.3);
         }
         
         .form-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
         }
         
         input, textarea, select {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-            font-family: Arial;
+            padding: 15px;
+            border: 2px solid #ffb3d9;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Poppins', Arial;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #ff6bb5;
+            box-shadow: 0 0 10px rgba(255, 107, 181, 0.3);
+            transform: scale(1.02);
         }
         
         textarea {
             resize: vertical;
-            min-height: 80px;
+            min-height: 100px;
         }
         
         button {
-            padding: 10px 20px;
+            padding: 15px 25px;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
         .btn-primary {
-            background: #667eea;
+            background: #ff6bb5;
             color: white;
         }
         
         .btn-primary:hover {
-            background: #5568d3;
+            background: #ffb3d9 ;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(255, 107, 181, 0.3);
         }
         
         .btn-update {
-            background: #5cb85c;
+            background: linear-gradient(135deg, #5cb85c 0%, #4cae4c 100%);
             color: white;
-            padding: 8px 15px;
+            padding: 10px 18px;
             font-size: 14px;
         }
         
         .btn-update:hover {
-            background: #4cae4c;
+            background: linear-gradient(135deg, #4cae4c 0%, #5cb85c 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(76, 174, 76, 0.3);
         }
         
         .btn-delete {
-            background: #d9534f;
+            background: linear-gradient(135deg, #d10000ff 0%, #c9302c 100%);
             color: white;
-            padding: 8px 15px;
+            padding: 10px 18px;
             font-size: 14px;
         }
         
-        .btn-delete:hover {
-            background: #c9302c;
+        .btn-edit {
+            background:#5cb85c;
+            color: white;
+            padding: 10px 18px;
+            font-size: 14px;
         }
-        
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 30px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            table-layout: auto; /* Agar kolom menyesuaikan konten */
         }
         
         th {
-            background: #667eea;
-            color: white;
-            padding: 15px;
-            text-align: left;
-            font-weight: bold;
+            background: #ff4d94;
+            color: #561d39ff;
+            padding: 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         }
         
         td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #eee;
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: top; /* Agar teks di atas jika ada wrap */
+        }
+        
+        tr:nth-child(even) {
+            background: #fff9fb;
         }
         
         tr:hover {
-            background: #f9f9f9;
+            background: #ffebf2;
+            transform: scale(1.01);
+            transition: all 0.2s ease;
         }
         
         .product-img {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             object-fit: cover;
-            border-radius: 5px;
+            border-radius: 10px;
+            border: 2px solid #ffb3d9;
+            transition: transform 0.3s ease;
+        }
+        
+        .product-img:hover {
+            transform: scale(1.1);
+        }
+        
+        .description-cell {
+            white-space: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         
         .action-cell {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .edit-form {
+            display: none;
+            width: 100%;
+            margin-top: 10px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            border: 1px solid #ffb3d9;
+        }
+        
+        .edit-form.show {
+            display: block;
+        }
+        
+        .edit-form .form-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .edit-form input, .edit-form textarea, .edit-form select {
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .edit-form textarea {
+            min-height: 60px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            table {
+                font-size: 14px;
+            }
+            
+            .action-cell {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .edit-form .form-row {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -263,7 +394,7 @@ $products = $conn->query("SELECT id, name, price, description, image, category F
         <div class="nav">
             <a href="admin_users.php">Kelola User</a>
             <a href="admin_transactions.php">Kelola Transaksi</a>
-            <a href="../auth/logout.php" style="background: #d9534f; color: white;">Logout</a>
+            <a href="../auth/logout.php">Logout</a>
         </div>
     </div>
 
@@ -306,29 +437,31 @@ $products = $conn->query("SELECT id, name, price, description, image, category F
             </td>
             <td><?= htmlspecialchars($p['name']) ?></td>
             <td>Rp <?= number_format($p['price'], 0, ',', '.') ?></td>
-            <td><?= substr(htmlspecialchars($p['description']), 0, 50) ?>...</td>
+            <td class="description-cell"><?= htmlspecialchars($p['description']) ?></td>
             <td><?= htmlspecialchars(isset($categories[$p['category']]) ? $categories[$p['category']] : $p['category']) ?></td>
             <td>
                 <div class="action-cell">
-                    <!-- UPDATE -->
-                    <form method="post" style="display:contents;">
-                        <input type="hidden" name="id" value="<?= $p['id'] ?>">
-                        <input type="text" name="name" value="<?= htmlspecialchars($p['name']) ?>" required style="min-width: 100px;">
-                        <input type="number" name="price" value="<?= $p['price'] ?>" required style="min-width: 80px;">
-                        <textarea name="description" style="min-width: 100px; min-height: 40px;"><?= htmlspecialchars($p['description']) ?></textarea>
-                        <select name="category" style="min-width: 150px;">
-                            <option value="">-- Pilih Kategori --</option>
-                            <?php foreach ($categories as $k => $label): ?>
-                                <option value="<?php echo htmlspecialchars($k); ?>" <?php if ($p['category'] === $k) echo 'selected'; ?>><?php echo htmlspecialchars($label); ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                        <button class="btn-update" name="update_produk">Update</button>
-                    </form>
-
-                    <!-- HAPUS -->
+                    <button class="btn-edit" onclick="toggleEdit(<?= $p['id'] ?>)">Edit</button>
                     <form method="post" style="display:inline;" onsubmit="return confirm('Yakin hapus produk ini?')">
                         <input type="hidden" name="id" value="<?= $p['id'] ?>">
                         <button class="btn-delete" name="hapus_produk">Hapus</button>
+                    </form>
+                </div>
+                <div class="edit-form" id="edit-<?= $p['id'] ?>">
+                    <form method="post">
+                        <input type="hidden" name="id" value="<?= $p['id'] ?>">
+                        <div class="form-row">
+                            <input type="text" name="name" value="<?= htmlspecialchars($p['name']) ?>" required>
+                            <input type="number" name="price" value="<?= $p['price'] ?>" required>
+                            <textarea name="description"><?= htmlspecialchars($p['description']) ?></textarea>
+                            <select name="category">
+                                <option value="">-- Pilih Kategori --</option>
+                                <?php foreach ($categories as $k => $label): ?>
+                                    <option value="<?php echo htmlspecialchars($k); ?>" <?php if ($p['category'] === $k) echo 'selected'; ?>><?php echo htmlspecialchars($label); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <button class="btn-update" name="update_produk">Update</button>
+                        </div>
                     </form>
                 </div>
             </td>
@@ -336,5 +469,13 @@ $products = $conn->query("SELECT id, name, price, description, image, category F
         <?php } ?>
     </table>
 </div>
+
+<script>
+function toggleEdit(id) {
+    const form = document.getElementById('edit-' + id);
+    form.classList.toggle('show');
+}
+</script>
+
 </body>
 </html>

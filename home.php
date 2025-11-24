@@ -438,41 +438,18 @@ $placeholder = 'assets/placeholder.png';
         /* slight adjustment to base html on very small screens for legibility */
         html { font-size: clamp(11px, calc(9px + 1.0vw), 14px); }
     }
-
-    .slider {
-        display: flex;
-        overflow-x: auto;
-        overflow-y: hidden;
-        scroll-snap-type: x mandatory;
-        scroll-behavior: smooth;
-        width: 100%;  
-        gap: 20px;
-    }
-
-    .slider::-webkit-scrollbar {
-        display: none;
-    }
-
-    .slide-item {
+    .hero {
         position: relative;
-        flex: 0 0 100%; 
-        height: auto;
-        scroll-snap-align: center;
-    }
-
-    .slide-item img {
         width: 100%;
-        height: auto;
-        object-fit: cover;
-        filter: brightness(60%);
+        height: 510px;
+        overflow: hidden;
     }
-
-    @media (min-width: 768px) {
-        .slide-item {
-          height: auto;
-          margin-top: 8px;
-          margin-bottom: 30px;
-        }
+    .hero-img {
+        width: 100%;
+        height: 88%;
+        margin-top: 20px;
+        object-fit: cover;  
+        filter: brightness(60%);
     }
 
     </style>
@@ -587,19 +564,8 @@ $placeholder = 'assets/placeholder.png';
             <?php endforeach; ?>
         </ul>
        
-        
-        <section class="slider">
-          <div class="slide-item">
-            <img src="assets/iklan.jpg" alt="Banner 1">
-          </div>
-                    
-          <div class="slide-item">
-            <img src="GAMBAR-LAIN-2.jpg" alt="Banner 2">
-          </div>
-                    
-          <div class="slide-item">
-            <img src="GAMBAR-LAIN-3.jpg" alt="Banner 3">
-          </div>
+        <section class="hero">
+            <img class="hero-img" src="assets/iklan.jpg" alt="Hero Banner">
         </section>
 
         <div class="product" aria-live="polite">
@@ -725,74 +691,72 @@ $placeholder = 'assets/placeholder.png';
     })();
 
     // add-to-cart handler (POST, checks data-logged, direct redirect if not logged)
-    document.addEventListener('click', function (e) {
-        const btn = e.target.closest('.add-to-cart');
-        if (!btn) return;
-        const productId = btn.dataset.id;
-        if (!productId) return;
+// add-to-cart handler (POST, cek data-logged, redirect ke login kalau belum login)
+document.addEventListener('click', function (e) {
+    const btn = e.target.closest('.add-to-cart');
+    if (!btn) return;
 
-        const logged = btn.getAttribute('data-logged') === '1';
+    const productId = btn.dataset.id;
+    if (!productId) return;
 
-        if (!logged) {
-            // langsung redirect ke halaman login tanpa toast/delay
+    const logged = btn.getAttribute('data-logged') === '1';
+
+    if (!logged) {
+        // langsung redirect ke halaman login tanpa toast/delay
+        const returnTo = encodeURIComponent(currentPathWithQuery());
+        window.location.href = 'auth/login.php?return=' + returnTo;
+        return;
+    }
+
+    // visual feedback
+    btn.disabled = true;
+    btn.style.opacity = '0.6';
+
+    // kirim POST request
+    const form = new URLSearchParams();
+    // PENTING: pakai 'product_id' supaya cocok dengan cart_add.php
+    form.append('product_id', productId);
+    // kalau mau qty: form.append('qty', '1');
+
+    fetch('cart/cart_add.php', {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        },
+        body: form.toString(),
+        credentials: 'same-origin'
+    })
+    .then(response => {
+        if (response.status === 401) {
             const returnTo = encodeURIComponent(currentPathWithQuery());
             window.location.href = 'auth/login.php?return=' + returnTo;
-            return;
+            throw new Error('Unauthorized');
         }
-
-        // visual feedback
-        btn.disabled = true;
-        btn.style.opacity = '0.6';
-
-        // send POST request
-        const form = new URLSearchParams();
-        form.append('id', productId);
-        // jika mau qty, tambahkan: form.append('qty', '1');
-
-        fetch('cart/cart_add.php', {
-            method: 'POST',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-            },
-            body: form.toString(),
-            credentials: 'same-origin'
-        })
-        .then(response => {
-            if (response.status === 401) {
-                // jika server masih menganggap unauthorized, arahkan ke login
-                const returnTo = encodeURIComponent(currentPathWithQuery());
-                window.location.href = 'auth/login.php?return=' + returnTo;
-                throw new Error('Unauthorized');
-            }
-            if (!response.ok) {
-                return response.json().then(j => { throw new Error(j.message || 'Server error'); });
-            }
-            return response.json();
-        })
-        .then(json => {
-            if (json && json.status === 'ok') {
-                showToast(json.message || 'Produk ditambahkan ke keranjang');
-                if (json.cart_count !== undefined) {
-                    const el = document.getElementById('cart-count');
-                    if (el) el.innerText = json.cart_count;
-                } else {
-                    updateCartCount();
-                }
-            } else {
-                showToast(json.message || 'Gagal menambahkan ke keranjang');
-            }
-        })
-        .catch(err => {
-            if (err.message !== 'Unauthorized') {
-                console.error('Gagal menambah keranjang:', err);
-                showToast('Gagal menambahkan ke keranjang');
-            }
-        })
-        .finally(() => {
-            setTimeout(() => { btn.disabled = false; btn.style.opacity = ''; }, 600);
-        });
+        if (!response.ok) {
+            throw new Error('Server error');
+        }
+        // kita nggak pakai JSON, cukup text
+        return response.text();
+    })
+    .then(() => {
+        // anggap kalau respons OK berarti sukses
+        showToast('Produk ditambahkan ke keranjang');
+        updateCartCount(); // ambil jumlah item terbaru dari cart_count.php
+    })
+    .catch(err => {
+        if (err.message !== 'Unauthorized') {
+            console.error('Gagal menambah keranjang:', err);
+            showToast('Gagal menambahkan ke keranjang');
+        }
+    })
+    .finally(() => {
+        setTimeout(() => { 
+            btn.disabled = false; 
+            btn.style.opacity = ''; 
+        }, 600);
     });
+});
 
     // NAV SEARCH expand/contract
     (function(){

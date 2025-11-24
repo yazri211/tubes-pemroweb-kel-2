@@ -438,41 +438,42 @@ $placeholder = 'assets/placeholder.png';
         /* slight adjustment to base html on very small screens for legibility */
         html { font-size: clamp(11px, calc(9px + 1.0vw), 14px); }
     }
-  .slider {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    width: 100%;
-    gap: 20px;
-  }
 
-  .slider::-webkit-scrollbar {
-    display: none;
-  }
-
-  .slide-item {
-    position: relative;
-    flex: 0 0 100%; 
-    height: 50vh;
-    scroll-snap-align: center;
-  }
-
-  .slide-item img {
-    width: 100%;
-    height: 90%;
-    margin-top: 15px;
-    object-fit: cover;
-    filter: brightness(60%);
-  }
-
-  @media (min-width: 768px) {
-    .slide-item {
-      height: 70vh;
+    .slider {
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        width: 100%;  
+        gap: 20px;
     }
-  }
 
-    
+    .slider::-webkit-scrollbar {
+        display: none;
+    }
+
+    .slide-item {
+        position: relative;
+        flex: 0 0 100%; 
+        height: auto;
+        scroll-snap-align: center;
+    }
+
+    .slide-item img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        filter: brightness(60%);
+    }
+
+    @media (min-width: 768px) {
+        .slide-item {
+          height: auto;
+          margin-top: 8px;
+          margin-bottom: 30px;
+        }
+    }
 
     </style>
 </head>
@@ -587,19 +588,19 @@ $placeholder = 'assets/placeholder.png';
         </ul>
        
         
-<section class="slider">
-  <div class="slide-item">
-    <img src="assets/iklan.jpg" alt="Banner 1">
-  </div>
-
-  <div class="slide-item">
-    <img src="GAMBAR-LAIN-2.jpg" alt="Banner 2">
-  </div>
-
-  <div class="slide-item">
-    <img src="GAMBAR-LAIN-3.jpg" alt="Banner 3">
-  </div>
-</section>
+        <section class="slider">
+          <div class="slide-item">
+            <img src="assets/iklan.jpg" alt="Banner 1">
+          </div>
+                    
+          <div class="slide-item">
+            <img src="GAMBAR-LAIN-2.jpg" alt="Banner 2">
+          </div>
+                    
+          <div class="slide-item">
+            <img src="GAMBAR-LAIN-3.jpg" alt="Banner 3">
+          </div>
+        </section>
 
         <div class="product" aria-live="polite">
             <?php

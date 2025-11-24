@@ -15,7 +15,6 @@ if (!isset($_GET['id'])) {
 $order_id = intval($_GET['id']);
 $user_id = intval($_SESSION['user_id']);
 
-// Ambil data transaksi (sederhana; bisa diubah ke prepared statement jika diperlukan)
 $q = "
     SELECT id, total, metode_pembayaran, alamat, pengiriman, ongkir, admin_fee, status, created_at 
     FROM transactions 

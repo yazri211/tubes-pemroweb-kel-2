@@ -13,10 +13,10 @@ include 'auth_admin.php';
             padding: 0;
             box-sizing: border-box;
         }
-        
+ 
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #fff7fb;
             min-height: 100vh;
             padding: 20px;
         }
@@ -35,7 +35,7 @@ include 'auth_admin.php';
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
-            border-bottom: 2px solid #667eea;
+            border-bottom: 2px solid #3f0f23ff;
             padding-bottom: 20px;
         }
         
@@ -56,7 +56,7 @@ include 'auth_admin.php';
         }
         
         .logout-btn {
-            background: #d9534f;
+            background: #ff4d94;
             color: white;
             padding: 10px 20px;
             border: none;
@@ -68,7 +68,7 @@ include 'auth_admin.php';
         }
         
         .logout-btn:hover {
-            background: #c9302c;
+            background: #;
         }
         
         .menu {
@@ -79,19 +79,19 @@ include 'auth_admin.php';
         }
         
         .menu-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, #ffb3d9 0%, #ffb3d9 100%);
+            color:#660033;
             padding: 30px;
             border-radius: 10px;
             text-align: center;
             text-decoration: none;
             transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 15px rgba(236, 49, 130, 0.4);
         }
         
         .menu-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.6);
+            box-shadow: 0 10px 25px rgba(205, 150, 180, 0.6);
         }
         
         .menu-card h2 {
@@ -128,17 +128,17 @@ include 'auth_admin.php';
         
         <div class="menu">
             <a href="admin_users.php" class="menu-card">
-                <h2>👥 Kelola Users</h2>
+                <h2> Kelola Users</h2>
                 <p>Tambah, edit, atau hapus akun pengguna</p>
             </a>
             
             <a href="admin_products.php" class="menu-card">
-                <h2>📦 Kelola Produk</h2>
+                <h2> Kelola Produk</h2>
                 <p>Kelola daftar produk toko Anda</p>
             </a>
             
             <a href="admin_transactions.php" class="menu-card">
-                <h2>💰 Kelola Transaksi</h2>
+                <h2> Kelola Transaksi</h2>
                 <p>Lihat dan ubah status transaksi</p>
             </a>
         </div>

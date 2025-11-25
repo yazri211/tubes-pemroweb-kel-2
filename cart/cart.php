@@ -102,12 +102,17 @@ if ($result === false) {
         .container { padding: 8px; }
         table, thead, tbody, th, td, tr { display: block; }
         th { display: none; }
+        /* hide the header row entirely (prevent empty rounded block) */
+        .cart-table thead,
+        .cart-table tr:first-child { display: none; height: 0; margin: 0; padding: 0; }
         tr {
             margin-bottom: 14px;
             border: 1px solid #ffb3d9;
             border-radius: 10px;
             padding: 10px;
             background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            display: block;
         }
         td {
             border: none;
@@ -180,7 +185,7 @@ if ($result === false) {
         <td data-label="Harga">Rp <?= number_format($row['price'], 0, ',', '.') ?></td>
 
         <td data-label="Jumlah">
-            <form action="edit_cart.php" method="POST" style="display:inline-block; margin:0;">
+            <form action="edit_cart.php" method="POST" class="inline-form">
                 <input type="hidden" name="cart_id" value="<?= htmlspecialchars($row['cart_id']) ?>">
                 <input type="number" name="quantity" value="<?= htmlspecialchars($row['quantity']) ?>" min="1" max="<?= htmlspecialchars((int)$row['stock']) ?>" title="Maksimal stok: <?= htmlspecialchars((int)$row['stock']) ?>">
                 <button type="submit">Update</button>
@@ -188,10 +193,11 @@ if ($result === false) {
             <small style="color:#999;">Stok: <?= htmlspecialchars((int)$row['stock']) ?></small>
         </td>
 
-        <td data-label="Total">Rp <?= number_format($row['price'] * $row['quantity'], 0, ',', '.') ?></td>
+        <?php $row_total = $row['price'] * $row['quantity']; $grand_total += $row_total; ?>
+        <td data-label="Total">Rp <?= number_format($row_total, 0, ',', '.') ?></td>
 
         <td data-label="Aksi">
-            <form action="delete_cart.php" method="POST" onsubmit="return confirm('Hapus item dari keranjang?');" style="display:inline-block; margin:0;">
+            <form action="delete_cart.php" method="POST" onsubmit="return confirm('Hapus item dari keranjang?');" class="inline-form">
                 <input type="hidden" name="cart_id" value="<?= htmlspecialchars($row['cart_id']) ?>">
                 <button type="submit">Hapus</button>
             </form>
@@ -202,10 +208,24 @@ if ($result === false) {
 
 <br>
 
-<form id="checkoutForm" action="../checkout/checkout.php" method="POST">
-    <button type="submit" style="width:200px; display:block; margin:0 auto;">Checkout</button>
-</form>
+<!-- Desktop summary -->
+<div class="cart-summary-desktop" style="margin-top:16px; display:flex; justify-content:flex-end; gap:12px; align-items:center;">
+    <div style="font-weight:700; color:#d63384;">Total: Rp <?= number_format($grand_total,0,',','.') ?></div>
+    <form id="checkoutForm" action="../checkout/checkout.php" method="POST">
+        <button type="submit" class="checkout-btn">Checkout</button>
+    </form>
+</div>
 
+<!-- Mobile fixed summary bar (only visible on small screens) -->
+<div class="cart-summary" aria-hidden="false">
+    <div style="flex:1">
+        <div class="small">Total</div>
+        <div class="total">Rp <?= number_format($grand_total,0,',','.') ?></div>
+    </div>
+    <form id="checkoutForm" action="../checkout/checkout.php" method="POST">
+        <button type="submit" class="checkout-btn">Checkout</button>
+    </form>
+</div>
 <?php endif; ?>
 
 </body>

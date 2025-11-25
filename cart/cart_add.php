@@ -1,10 +1,13 @@
 <?php
-include '../conn.php';
 session_start();
+require '../conn.php';
 
-// Pastikan user login
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ../auth/login.php");
+header('Content-Type: text/plain; charset=utf-8');
+
+// Wajib POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo 'Method Not Allowed';
     exit();
 }
 
@@ -59,4 +62,3 @@ if ($check->num_rows > 0) {
 }
 
 exit();
-?>

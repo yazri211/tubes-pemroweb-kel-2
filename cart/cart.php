@@ -13,7 +13,7 @@ $user_id = (int) $_SESSION['user_id'];
 
 $query = "
     SELECT cart.id AS cart_id, cart.quantity,
-    products.id AS product_id, products.name, products.price, products.image
+    products.id AS product_id, products.name, products.price, products.image, products.stock
     FROM cart
     JOIN products ON cart.product_id = products.id
     WHERE cart.user_id = $user_id
@@ -27,6 +27,7 @@ if ($result === false) {
 <html>
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Keranjang</title>
 <style>
     body {
@@ -34,6 +35,11 @@ if ($result === false) {
         background: #ffe6f2;
         margin: 0;
         padding: 20px;
+    }
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 10px;
     }
     h2 {
         color: #d63384;
@@ -55,6 +61,7 @@ if ($result === false) {
         border-radius: 10px;
         overflow: hidden;
         margin-top: 20px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.04);
     }
     th, td {
         padding: 12px;
@@ -62,7 +69,7 @@ if ($result === false) {
         border-bottom: 1px solid #ffcce6;
     }
     th {
-        background: rgba(255, 179, 217, 1);
+        background: #ffb3d9;
         color: #660033;
         font-size: 15px;
     }
@@ -89,12 +96,14 @@ if ($result === false) {
         display:block;
         margin: 0 auto;
     }
+    .actions { display:flex; gap:8px; justify-content:center; align-items:center; }
     /* Responsif untuk HP */
     @media screen and (max-width: 768px) {
+        .container { padding: 8px; }
         table, thead, tbody, th, td, tr { display: block; }
         th { display: none; }
         tr {
-            margin-bottom: 15px;
+            margin-bottom: 14px;
             border: 1px solid #ffb3d9;
             border-radius: 10px;
             padding: 10px;
@@ -102,10 +111,13 @@ if ($result === false) {
         }
         td {
             border: none;
-            margin: 5px 0;
+            margin: 6px 0;
             text-align: left;
             position: relative;
-            padding-left: 100px;
+            padding-left: 110px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         td:before {
             content: attr(data-label);
@@ -113,22 +125,26 @@ if ($result === false) {
             left: 10px;
             font-weight: bold;
             color: #d63384;
+            width: 90px;
         }
-        img.product-thumb { width: 100px !important; }
-        button, a.button { width: 100%; margin-top: 5px; display:block; text-align:center; }
+        img.product-thumb { width: 90px !important; flex: 0 0 90px; }
+        .actions { flex-direction: column; gap:6px; width:120px; }
+        input[type="number"] { width: 100%; max-width:120px; }
+        button, a.button { width: 100%; margin-top: 6px; display:block; text-align:center; }
     }
 </style>
 </head>
 <body>
 
-<h2>Keranjang Belanja</h2>
-<a class="button" href="../home.php">home</a>
+<div class="container">
+    <a class="button" href="../home.php">home</a>
+    <h2>Keranjang Belanja</h2>
 
 <?php if (mysqli_num_rows($result) == 0): ?>
     <p>Keranjang kosong.</p>
 <?php else: ?>
 
-<table border="1" cellpadding="10" cellspacing="0">
+<table class="cart-table">
     <tr>
         <th>Pilih</th>
         <th>Gambar</th>
@@ -166,9 +182,10 @@ if ($result === false) {
         <td data-label="Jumlah">
             <form action="edit_cart.php" method="POST" style="display:inline-block; margin:0;">
                 <input type="hidden" name="cart_id" value="<?= htmlspecialchars($row['cart_id']) ?>">
-                <input type="number" name="quantity" value="<?= htmlspecialchars($row['quantity']) ?>" min="1">
+                <input type="number" name="quantity" value="<?= htmlspecialchars($row['quantity']) ?>" min="1" max="<?= htmlspecialchars((int)$row['stock']) ?>" title="Maksimal stok: <?= htmlspecialchars((int)$row['stock']) ?>">
                 <button type="submit">Update</button>
             </form>
+            <small style="color:#999;">Stok: <?= htmlspecialchars((int)$row['stock']) ?></small>
         </td>
 
         <td data-label="Total">Rp <?= number_format($row['price'] * $row['quantity'], 0, ',', '.') ?></td>

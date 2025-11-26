@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($username === '' || $password === '') {
         $error = true;
-        $error_msg = 'Username dan password harus diisi.';
+        $error_msg = 'Nama Pengguna dan kata sandi harus diisi.';
     } else {
         $username_safe = mysqli_real_escape_string($conn, $username);
 
@@ -32,13 +32,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             if (mysqli_num_rows($query) === 0) {
                 $error = true;
-                $error_msg = 'Username atau password salah.';
+                $error_msg = 'Nama Pengguna atau kata sandi salah.';
             } else {
                 $user = mysqli_fetch_assoc($query);
 
                 if (!isset($user['password']) || $user['password'] === '') {
                     $error = true;
-                    $error_msg = 'Data user tidak valid. Hubungi admin.';
+                    $error_msg = 'Data pengguna tidak valid. Hubungi admin.';
                 } else if ($user && password_verify($password, $user['password'])) {
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['username'] = $user['username'];
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     exit();
                 } else {
                     $error = true;
-                    $error_msg = 'Username atau password salah.';
+                    $error_msg = 'Nama Pengguna atau kata sandi salah.';
                 }
             }
         }
@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <form id="loginForm" action="" method="post" novalidate>
         <ul>
           <li>
-            <label for="username">Username :</label>
+            <label for="username">Nama Pengguna :</label>
             <div class="input-wrap">
               <input
                 type="text"
@@ -125,10 +125,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </li>
 
           <li>
-            <label for="password">Password :</label>
+            <label for="password">Kata Sandi :</label>
             <div class="input-wrap" style="position:relative">
               <input type="password" name="password" id="password" autocomplete="current-password" required>
-              <button type="button" class="toggle-pw" id="togglePw" aria-pressed="false" aria-label="Tampilkan password">
+              <button type="button" class="toggle-pw" id="togglePw" aria-pressed="false" aria-label="Tampilkan kata sandi">
                 <svg class="icon-eye" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <path d="M12 5C7 5 2.73 8.11 1 12c1.73 3.89 6 7 11 7s9.27-3.11 11-7c-1.73-3.89-6-7-11-7z" stroke="#ff6aa6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                   <circle cx="12" cy="12" r="3" stroke="#ff6aa6" stroke-width="2"/>
@@ -141,12 +141,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </li>
 
           <li>
-            <button type="submit" name="login" id="submitBtn">Login</button>
+            <button type="submit" name="login" id="submitBtn">Masuk</button>
           </li>
         </ul>
       </form>
 
-      <p class="help-text">Belum punya akun? <a href="register.php">Register</a></p>
+      <p class="help-text">Belum punya akun? <a href="register.php">Daftar</a></p>
     </main>
   </div>
 

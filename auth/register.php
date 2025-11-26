@@ -20,7 +20,7 @@ if (isset($_POST['register'])) {
     $old['email'] = $email;
 
     if ($password !== $konfir_password) {
-        $msg = "Konfirmasi password tidak sesuai";
+        $msg = "Konfirmasi kata sandi tidak sesuai";
     } elseif ($username === '' || $email === '' || $password === '') {
         $msg = "Silakan isi semua field";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -44,7 +44,7 @@ if (isset($_POST['register'])) {
                 echo "<script>alert('Registrasi berhasil! Silakan login.'); window.location='login.php';</script>";
                 exit;
             } else {
-                $msg = "Gagal registrasi! (server)";
+                $msg = "Gagal Mendaftar! (server)";
             }
         }
     }
@@ -187,7 +187,7 @@ if (isset($_POST['register'])) {
 <body>
   <div class="container">
     <main class="login-card" role="main" aria-labelledby="regTitle">
-      <h1 id="regTitle">REGISTRASI</h1>
+      <h1 id="regTitle">DAFTAR</h1>
       <p class="subtitle">Buat akun untuk mengakses layanan kami</p>
 
       <!-- Pesan server -->
@@ -198,7 +198,7 @@ if (isset($_POST['register'])) {
       <form id="regForm" action="" method="post" novalidate>
         <ul>
           <li>
-            <label for="username">Username :</label>
+            <label for="username">Nama Pengguna :</label>
             <div class="input-wrap">
               <input type="text"
                      name="username"
@@ -226,7 +226,7 @@ if (isset($_POST['register'])) {
           </li>
 
           <li>
-            <label for="password">Password :</label>
+            <label for="password">Kata Sandi :</label>
             <div class="input-wrap">
               <input type="password"
                      name="password"
@@ -250,7 +250,7 @@ if (isset($_POST['register'])) {
           </li>
 
           <li>
-            <label for="konfir_password">Konfirmasi Password :</label>
+            <label for="konfir_password">Konfirmasi Kata Sandi :</label>
             <div class="input-wrap">
               <input type="password"
                      name="konfir_password"
@@ -271,11 +271,11 @@ if (isset($_POST['register'])) {
           </li>
 
           <li>
-            <button type="submit" name="register">Register</button>
+            <button type="submit" name="register">Daftar</button>
           </li>
 
           <li>
-            <p class="help-text">Sudah punya akun? <a href="login.php">Login</a> sekarang</p>
+            <p class="help-text">Sudah punya akun? <a href="login.php">Masuk</a> sekarang</p>
           </li>
         </ul>
       </form>

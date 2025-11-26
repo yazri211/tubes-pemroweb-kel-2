@@ -88,21 +88,11 @@ $tx = mysqli_query($conn, "
             font-weight: 500;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        
-        .nav a:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-        
+      
         .nav a:last-child {
             background: #b43074ff;
         }
-        
-        .nav a:last-child:hover {
-            background: #65143eff;
-        }
-        
+      
         .section-title {
             font-size: 22px;
             margin: 40px 0 20px 0;
@@ -166,26 +156,14 @@ $tx = mysqli_query($conn, "
             background: #ff6bb5;
             color: white;
         }
-        
-        .btn-primary:hover {
-            background: #ffb3d9 ;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(255, 107, 181, 0.3);
-        }
-        
+
         .btn-update {
             background: linear-gradient(135deg, #5cb85c 0%, #4cae4c 100%);
             color: white;
             padding: 10px 18px;
             font-size: 14px;
         }
-        
-        .btn-update:hover {
-            background: linear-gradient(135deg, #4cae4c 0%, #5cb85c 100%);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(76, 174, 76, 0.3);
-        }
-        
+ 
         .btn-delete {
             background: linear-gradient(135deg, #d10000ff 0%, #c9302c 100%);
             color: white;
@@ -221,13 +199,7 @@ $tx = mysqli_query($conn, "
         tr:nth-child(even) {
             background: #fff9fb;
         }
-        
-        tr:hover {
-            background: #ffebf2;
-            transform: scale(1.01);
-            transition: all 0.2s ease;
-        }
-        
+     
         .product-img {
             width: 60px;
             height: 60px;
@@ -236,11 +208,7 @@ $tx = mysqli_query($conn, "
             border: 2px solid #ffb3d9;
             transition: transform 0.3s ease;
         }
-        
-        .product-img:hover {
-            transform: scale(1.1);
-        }
-        
+     
         .action-cell {
             display: flex;
             gap: 10px;

@@ -67,10 +67,6 @@ include 'auth_admin.php';
             transition: background 0.3s;
         }
         
-        .logout-btn:hover {
-            background: #;
-        }
-        
         .menu {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -87,11 +83,6 @@ include 'auth_admin.php';
             text-decoration: none;
             transition: transform 0.3s, box-shadow 0.3s;
             box-shadow: 0 5px 15px rgba(236, 49, 130, 0.4);
-        }
-        
-        .menu-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(205, 150, 180, 0.6);
         }
         
         .menu-card h2 {

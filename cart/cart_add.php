@@ -11,49 +11,54 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit();
 }
 
-// Cek login
-if (empty($_SESSION['user_id'])) {
-    http_response_code(401);
-    echo 'Unauthorized';
-    exit();
-}
-
-$user_id    = (int) $_SESSION['user_id'];
-$product_id = isset($_POST['product_id']) ? (int) $_POST['product_id'] : 0;
+$user_id = $_SESSION['user_id'];
+$product_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 if ($product_id <= 0) {
-    http_response_code(400);
-    echo 'Produk tidak valid';
+    header("Location: cart.php");
     exit();
 }
 
-// cek apakah produk sudah ada di keranjang
-$sqlCheck = "SELECT quantity FROM cart WHERE user_id = ? AND product_id = ? LIMIT 1";
-$stmt = $conn->prepare($sqlCheck);
-$stmt->bind_param("ii", $user_id, $product_id);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($row = $result->fetch_assoc()) {
-    // kalau sudah ada, tambahkan jumlahnya
-    $sqlUpdate = "UPDATE cart SET quantity = quantity + 1 
-                  WHERE user_id = ? AND product_id = ?";
-    $stmtUpdate = $conn->prepare($sqlUpdate);
-    $stmtUpdate->bind_param("ii", $user_id, $product_id);
-    $stmtUpdate->execute();
-    $stmtUpdate->close();
-} else {
-    // kalau belum ada, insert baru
-    $sqlInsert = "INSERT INTO cart (user_id, product_id, quantity) 
-                  VALUES (?, ?, 1)";
-    $stmtInsert = $conn->prepare($sqlInsert);
-    $stmtInsert->bind_param("ii", $user_id, $product_id);
-    $stmtInsert->execute();
-    $stmtInsert->close();
+// Ambil info produk (termasuk stok)
+$product = $conn->query("SELECT id, stock FROM products WHERE id = $product_id");
+if (!$product || $product->num_rows === 0) {
+    // Produk tidak ditemukan
+    header("Location: cart.php");
+    exit();
 }
 
-$stmt->close();
+$prod_data = $product->fetch_assoc();
+$available_stock = (int)$prod_data['stock'];
 
-// Balasan simpel ke JS
-echo 'OK';
+// cek apakah produk sudah ada di keranjang user
+$check = $conn->query("SELECT quantity FROM cart WHERE user_id = $user_id AND product_id = $product_id");
+
+if ($check->num_rows > 0) {
+    // kalau sudah ada, cek jika menambah 1 tidak melebihi stok
+    $cart_item = $check->fetch_assoc();
+    $current_qty = (int)$cart_item['quantity'];
+    $new_qty = $current_qty + 1;
+    
+    if ($new_qty <= $available_stock) {
+        // Update hanya jika tidak melebihi stok
+        $conn->query("UPDATE cart SET quantity = $new_qty 
+                      WHERE user_id = $user_id AND product_id = $product_id");
+        // Redirect dengan pesan sukses
+        header("Location: cart.php?msg=Produk+ditambahkan");
+    } else {
+        // Stok tidak cukup
+        header("Location: cart.php?error=Stok+tidak+cukup");
+    }
+} else {
+    // kalau belum ada, cek apakah stok cukup untuk menambah 1 item
+    if ($available_stock > 0) {
+        $conn->query("INSERT INTO cart (user_id, product_id, quantity) 
+                      VALUES ($user_id, $product_id, 1)");
+        header("Location: cart.php?msg=Produk+ditambahkan");
+    } else {
+        // Stok habis
+        header("Location: cart.php?error=Produk+habis");
+    }
+}
+
 exit();

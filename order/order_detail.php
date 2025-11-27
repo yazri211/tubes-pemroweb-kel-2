@@ -60,169 +60,427 @@ while ($r = mysqli_fetch_assoc($items_q)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Detail Transaksi #<?= htmlspecialchars($order['id']) ?></title>
 
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         :root{
-            --max-w:900px;
-            --bg: #ffe6f2;
-            --pink-light: #ffb3d9;
-            --pink-mid: #ff66b3;
-            --pink-dark: #d63384;
+            --max-w: 900px;
+            --bg: #fdf2f8;
+            --card-bg: #ffffff;
+            --pink-light: #fed7e2;
+            --pink-mid: #ec4899;
+            --pink-dark: #be185d;
             --muted: #6b6b6b;
-            --card-shadow: 0 6px 20px rgba(255,105,180,0.12);
-            --radius: 12px;
+            --card-shadow: 0 6px 18px rgba(0,0,0,0.06);
+            --radius: 16px;
             --gap: 16px;
         }
 
-        *{box-sizing:border-box;margin:0;padding:0}
-        html,body{height:100%;font-family:"Poppins", Arial, sans-serif;background:var(--bg);color:#222;}
-        a{color:inherit;text-decoration:none}
-        .container{
-            max-width:var(--max-w);
-            margin:20px auto;
-            background:#fff;
-            padding:22px;
-            border-radius:var(--radius);
-            box-shadow:var(--card-shadow);
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
-        /* header */
-        .header{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            gap:12px;
-            margin-bottom:18px;
-            padding-bottom:14px;
-            border-bottom:3px solid var(--pink-light);
+        html, body {
+            height: 100%;
+            font-family: "Poppins", Arial, sans-serif;
+            background: var(--bg);
+            color: #222;
         }
-        .header h1{font-size:20px;color:var(--pink-dark);font-weight:800}
-        .status-badge{
-            padding:8px 14px;
-            border-radius:999px;
-            font-weight:800;
-            font-size:13px;
+
+        a {
+            color: inherit;
+            text-decoration: none;
         }
-        .status-pending{background:#fff3cd;color:#856404}
-        .status-completed{background:#d4edda;color:#155724}
-        .status-canceled{background:#f8d7da;color:#721c24}
 
-        .nav a{
-            display:inline-block;
-            padding:8px 12px;
-            border-radius:10px;
-            border:2px solid var(--pink-dark);
-            color:var(--pink-dark);
-            font-weight:700;
-            background:#fff;
+        body {
+            padding: 16px;
         }
-        .nav a:hover{ background:var(--pink-dark); color:#fff; transform:translateY(-3px); }
 
-        /* info box */
-        .info-box{
-            background:linear-gradient(180deg,#fff7fa 0%, #fff0f5 100%);
-            padding:14px;
-            border-radius:12px;
-            margin-bottom:14px;
-            border-left:6px solid var(--pink-mid);
+        .container {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 22px 20px 26px;
+            border-radius: var(--radius);
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--pink-light);
         }
-        .info-row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:10px; }
-        .info-row label{display:block; font-weight:700; color:var(--pink-dark); margin-bottom:6px;}
-        .info-row span{display:block; color:var(--muted)}
 
-        /* table */
-        table{ width:100%; border-collapse:collapse; margin-top:8px; }
-        th{
-            background:var(--pink-light);
-            color:var(--pink-dark);
-            text-align:left;
-            padding:12px;
-            font-weight:800;
-            font-size:14px;
+        /* HEADER */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            padding-bottom: 14px;
+            border-bottom: 2px solid var(--pink-light);
         }
-        td{ padding:12px 10px; border-bottom:1px solid #ffdfe8; vertical-align:middle; color:#222; }
-        tr:hover{ background:#fff0f6; }
 
-        /* rating / form */
-        .rating-form { margin-top:8px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-        .rating-form select { padding:8px;border-radius:8px;border:1px solid #ffdfe8; font-weight:700; }
-        .rating-form button { padding:8px 12px;border-radius:8px;border:none;background:var(--pink-mid);color:#fff;font-weight:800; cursor:pointer; }
-        .rating-form button:hover { background:var(--pink-dark); }
-
-        /* summary */
-        .summary{
-            background:#fff;
-            padding:14px;
-            border-radius:12px;
-            margin-top:16px;
-            box-shadow:0 4px 14px rgba(0,0,0,0.04);
-            text-align:right;
+        .header-left h1 {
+            font-size: 20px;
+            color: var(--pink-dark);
+            font-weight: 800;
+            margin-bottom: 4px;
         }
-        .summary-row{ display:flex; justify-content:space-between; gap:12px; margin-bottom:8px; color:#333; font-weight:700; }
-        .summary-row.total{ border-top:3px solid var(--pink-light); padding-top:10px; font-size:18px; color:var(--pink-dark) }
 
-        .btn{
-            display:inline-block;
-            padding:10px 14px;
-            border-radius:12px;
-            background:var(--pink-mid);
-            color:#fff;
-            font-weight:800;
-            text-decoration:none;
-            transition:transform .14s ease, background .14s ease;
+        .header-left small {
+            font-size: 12px;
+            color: var(--muted);
         }
-        .btn:hover{ transform:translateY(-3px); background:var(--pink-dark); color:#fff }
 
-        /* responsive */
-        @media (max-width:768px){
-            .info-row{ grid-template-columns:1fr; }
-            table, thead, tbody, th, td, tr{ display:block; width:100% }
-            th{ display:none; }
-            tr{ background:#fff; margin-bottom:12px; padding:12px; border-radius:10px; box-shadow:var(--card-shadow); }
-            td{ border:none; padding:8px 0; display:flex; justify-content:space-between; }
-            td:before{ content:attr(data-label); font-weight:800; color:var(--pink-dark); margin-right:8px; width:45%; text-align:left; }
-            .summary{text-align:left}
+        .status-badge {
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        /* Status versi bahasa Inggris & Indonesia */
+        .status-pending,
+        .status-tertunda {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-completed,
+        .status-selesai {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-canceled,
+        .status-batal {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* INFO BOX */
+        .info-box {
+            background: #fff7fb;
+            padding: 14px;
+            border-radius: 14px;
+            margin-bottom: 16px;
+            border: 1px solid var(--pink-light);
+        }
+
+        .info-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--pink-dark);
+            margin-bottom: 8px;
+        }
+
+        .info-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 10px;
+        }
+
+        .info-item label {
+            display: block;
+            font-weight: 600;
+            color: var(--pink-mid);
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .info-item span {
+            display: block;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* TABEL PRODUK */
+        h2.section-title {
+            margin: 6px 0 10px 0;
+            color: var(--pink-dark);
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 700;
+        }
+
+        h2.section-title span.icon {
+            font-size: 18px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 4px;
+            background: #fff;
+        }
+
+        thead {
+            background: #fee2f2;
+        }
+
+        th {
+            color: var(--pink-dark);
+            text-align: left;
+            padding: 10px 12px;
+            font-weight: 700;
+            font-size: 13px;
+            border-bottom: 1px solid var(--pink-light);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #ffe4f1;
+            vertical-align: middle;
+            color: #222;
+            font-size: 13px;
+        }
+
+        tbody tr:hover {
+            background: #fff7fb;
+        }
+
+        /* RATING / FORM */
+        .rating-form {
+            margin-top: 6px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .rating-form select {
+            padding: 7px 10px;
+            border-radius: 10px;
+            border: 1px solid #ffdfe8;
+            font-weight: 600;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .rating-form button {
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: none;
+            background: var(--pink-mid);
+            color: #fff;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.15s ease, transform 0.15s ease;
+        }
+
+        .rating-form button:hover {
+            background: var(--pink-dark);
+            transform: translateY(-1px);
+        }
+
+        /* SUMMARY */
+        .summary {
+            background: #fff;
+            padding: 14px;
+            border-radius: 14px;
+            margin-top: 16px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+            border: 1px solid #ffe4f1;
+            text-align: right;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 6px;
+            color: #333;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .summary-row.total {
+            border-top: 2px solid var(--pink-light);
+            padding-top: 8px;
+            font-size: 16px;
+            color: var(--pink-dark);
+            font-weight: 800;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 14px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: var(--pink-mid);
+            color: #fff;
+            font-weight: 700;
+            font-size: 13px;
+            text-decoration: none;
+            transition: transform 0.14s ease, background 0.14s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            background: var(--pink-dark);
+            color: #fff;
+        }
+
+        /* RESPONSIVE: tablet & HP (≤ 1024px) */
+        @media (max-width: 1024px) {
+            body {
+                padding: 12px;
+            }
+
+            .container {
+                padding: 18px 14px 22px;
+                border-radius: 14px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-left h1 {
+                font-size: 18px;
+            }
+        }
+
+        /* RESPONSIVE: HP / layar kecil (≤ 768px) */
+        @media (max-width: 768px) {
+            .info-row {
+                grid-template-columns: 1fr;
+            }
+
+            .summary {
+                text-align: left;
+            }
+
+            /* Tabel jadi card per produk */
+            table,
+            thead,
+            tbody,
+            th,
+            td,
+            tr {
+                display: block;
+                width: 100%;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tbody {
+                margin-top: 4px;
+            }
+
+            tbody tr {
+                background: #ffffff;
+                margin-bottom: 12px;
+                padding: 10px 12px;
+                border-radius: 12px;
+                box-shadow: var(--card-shadow);
+                border: 1px solid #ffe4f1;
+            }
+
+            td {
+                border: none;
+                padding: 6px 0;
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+            }
+
+            td:before {
+                content: attr(data-label);
+                font-weight: 700;
+                color: var(--pink-mid);
+                margin-right: 8px;
+                font-size: 12px;
+                min-width: 110px;
+                max-width: 50%;
+                text-align: left;
+            }
+
+            /* Baris rating yang colspan dibuat full content, tanpa label */
+            tr td[colspan="4"] {
+                display: block;
+                padding-top: 4px;
+            }
+
+            tr td[colspan="4"]:before {
+                content: "";
+                display: none;
+            }
+
+            .rating-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .rating-form select,
+            .rating-form button {
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
 <div class="container" role="main" aria-labelledby="title">
     <div class="header">
-        <h1 id="title">Detail Transaksi #<?= htmlspecialchars($order['id']) ?></h1>
+        <div class="header-left">
+            <h1 id="title">Detail Transaksi #<?= htmlspecialchars($order['id']) ?></h1>
+            <small>Ringkasan pesanan dan penilaian produk Anda.</small>
+        </div>
         <div>
-            <span class="status-badge status-<?= htmlspecialchars($order['status']) ?>"><?= ucfirst(htmlspecialchars($order['status'])) ?></span>
+            <span class="status-badge status-<?= htmlspecialchars($order['status']) ?>">
+                <?= ucfirst(htmlspecialchars($order['status'])) ?>
+            </span>
         </div>
     </div>
 
     <div class="info-box" role="region" aria-label="Informasi transaksi">
+        <div class="info-title">Informasi Transaksi</div>
         <div class="info-row">
-            <div>
+            <div class="info-item">
                 <label>Tanggal Transaksi</label>
                 <span><?= htmlspecialchars(date('d/m/Y H:i', strtotime($order['created_at']))) ?></span>
             </div>
-            <div>
+            <div class="info-item">
                 <label>Metode Pembayaran</label>
                 <span><?= htmlspecialchars($order['metode_pembayaran']) ?></span>
             </div>
         </div>
 
         <div class="info-row">
-            <div>
+            <div class="info-item">
                 <label>Jenis Pengiriman</label>
                 <span><?= htmlspecialchars($order['pengiriman']) ?></span>
             </div>
-            <div>
+            <div class="info-item">
                 <label>Ongkir</label>
                 <span>Rp <?= number_format((float)$order['ongkir'], 0, ',', '.') ?></span>
             </div>
         </div>
 
-        <div>
+        <div class="info-item">
             <label>Alamat Pengiriman</label>
             <span><?= nl2br(htmlspecialchars($order['alamat'])) ?></span>
         </div>
     </div>
 
-    <h2 style="margin:0 0 12px 0; color:var(--pink-dark); font-size:18px;">📦 Detail Produk</h2>
+    <h2 class="section-title">
+        <span class="icon">📦</span>
+        <span>Detail Produk</span>
+    </h2>
 
     <table role="table" aria-label="Daftar produk">
         <thead>
@@ -246,12 +504,10 @@ while ($r = mysqli_fetch_assoc($items_q)) {
                 <td data-label="Subtotal">Rp <?= $subtotal_fmt ?></td>
             </tr>
 
-            <!-- Rating area: tampilkan sekali per produk jika status completed -->
-            <?php if ($order['status'] === 'completed'): ?>
+            <?php if ($order['status'] === 'completed' || $order['status'] === 'selesai'): ?>
             <tr>
-                <td colspan="4" style="background:transparent; border-bottom:none; padding-top:6px;">
+                <td colspan="4" style="background:transparent; border-bottom:none; padding-top:4px;">
                     <?php
-                    // Cek apakah user sudah memberi rating untuk produk ini pada transaksi ini
                     $safe_user = intval($user_id);
                     $safe_prod = intval($prod_id);
                     $check_sql = "SELECT rating FROM product_reviews WHERE user_id = {$safe_user} AND product_id = {$safe_prod} AND transaction_id = {$order_id} LIMIT 1";
@@ -259,13 +515,15 @@ while ($r = mysqli_fetch_assoc($items_q)) {
                     if ($check_q && mysqli_num_rows($check_q) > 0) :
                         $rv = mysqli_fetch_assoc($check_q);
                         $rating = intval($rv['rating']);
-                        echo '<strong>Rating Anda:</strong> ' . str_repeat('★', $rating) . str_repeat('☆', 5 - $rating);
+                        echo '<strong>Rating Anda:</strong> ' .
+                             str_repeat('★', $rating) .
+                             str_repeat('☆', 5 - $rating);
                     else :
                     ?>
                         <form class="rating-form" action="../review_add.php" method="POST" aria-label="Formulir rating">
                             <input type="hidden" name="product_id" value="<?= $prod_id ?>">
                             <input type="hidden" name="transaction_id" value="<?= $order_id ?>">
-                            <label for="rating-<?= $prod_id ?>" style="font-weight:700;color:var(--pink-dark);">Rating:</label>
+                            <label for="rating-<?= $prod_id ?>" style="font-weight:700;color:var(--pink-mid);font-size:13px;">Berikan Rating:</label>
                             <select id="rating-<?= $prod_id ?>" name="rating" required>
                                 <option value="">Pilih Bintang</option>
                                 <option value="5">★★★★★ (5)</option>
@@ -287,15 +545,25 @@ while ($r = mysqli_fetch_assoc($items_q)) {
     </table>
 
     <div class="summary" aria-label="Ringkasan pembayaran">
-        <div class="summary-row"><span>Subtotal Produk:</span><span>Rp <?= number_format($subtotal_produk, 0, ',', '.') ?></span></div>
-        <div class="summary-row"><span>Ongkir:</span><span>Rp <?= number_format((float)$order['ongkir'], 0, ',', '.') ?></span></div>
-        <div class="summary-row"><span>Admin Fee:</span><span>Rp <?= number_format((float)$order['admin_fee'], 0, ',', '.') ?></span></div>
-        <div class="summary-row total"><span>Total Pembayaran:</span><span>Rp <?= number_format((float)$order['total'], 0, ',', '.') ?></span></div>
+        <div class="summary-row">
+            <span>Subtotal Produk:</span>
+            <span>Rp <?= number_format($subtotal_produk, 0, ',', '.') ?></span>
+        </div>
+        <div class="summary-row">
+            <span>Ongkir:</span>
+            <span>Rp <?= number_format((float)$order['ongkir'], 0, ',', '.') ?></span>
+        </div>
+        <div class="summary-row">
+            <span>Admin Fee:</span>
+            <span>Rp <?= number_format((float)$order['admin_fee'], 0, ',', '.') ?></span>
+        </div>
+        <div class="summary-row total">
+            <span>Total Pembayaran:</span>
+            <span>Rp <?= number_format((float)$order['total'], 0, ',', '.') ?></span>
+        </div>
     </div>
 
-    <div style="margin-top:14px;">
-        <a href="order_history.php" class="btn">← Kembali ke Riwayat Transaksi</a>
-    </div>
+    <a href="order_history.php" class="btn">← Kembali ke Riwayat Transaksi</a>
 </div>
 </body>
 </html>

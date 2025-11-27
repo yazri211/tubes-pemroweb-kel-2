@@ -17,11 +17,9 @@ if (isset($_POST['tambah_produk'])) {
     $price = intval($_POST['price']);
     $description = htmlspecialchars($_POST['description']);
     $category = isset($_POST['category']) ? trim($_POST['category']) : '';
-    // validate category, fallback to empty string if invalid
     if (!array_key_exists($category, $categories)) $category = '';
     $image = "produk.jpg"; // Default image
     
-    // Handle file upload
     if (!empty($_FILES['image']['name'])) {
         $file = $_FILES['image'];
         $allowed = ['jpg', 'jpeg', 'png', 'gif'];
@@ -33,7 +31,7 @@ if (isset($_POST['tambah_produk'])) {
         }
     }
     
-        if ($name && $price > 0) {
+    if ($name && $price > 0) {
         $stmt = $conn->prepare("INSERT INTO products (name, price, description, image, category) VALUES (?, ?, ?, ?, ?)");
         $stmt->bind_param("sisss", $name, $price, $description, $image, $category);
         $stmt->execute();
@@ -80,7 +78,7 @@ if (isset($_POST['hapus_produk'])) {
     exit();
 }
 
-// LOAD PRODUK (tambahkan category)
+// LOAD PRODUK
 $products = $conn->query("SELECT id, name, price, description, image, category FROM products ORDER BY id DESC");
 ?>
 <!DOCTYPE html>
@@ -99,7 +97,7 @@ $products = $conn->query("SELECT id, name, price, description, image, category F
         
         body {
             font-family: 'Poppins', Arial, sans-serif;
-            background: #fff7fb;
+            background: #fdf2f8; /* soft pink */
             min-height: 100vh;
             padding: 20px;
             color: #333;
@@ -108,174 +106,256 @@ $products = $conn->query("SELECT id, name, price, description, image, category F
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
+            background: #ffffff;
+            padding: 32px 32px 40px;
+            border-radius: 24px;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid #fed7e2;
         }
         
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 40px;
-            border-bottom: 3px solid #ff6bb5;
-            padding-bottom: 25px;
-            background: #ff6bb5;
-            padding: 20px;
-            border-radius: 15px;
+            margin-bottom: 28px;
+            padding: 18px 22px;
+            border-radius: 18px;
+            background: #ec4899; /* pink solid */
             color: white;
+            box-shadow: 0 12px 28px rgba(236, 72, 153, 0.45);
         }
         
         .header h1 {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 span {
+            margin-right: 6px;
         }
         
         .nav {
             display: flex;
-            gap: 20px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
         
         .nav a {
-            color: white;
+            color: #ec4899;
             text-decoration: none;
-            padding: 12px 20px;
-            border-radius: 25px;
-            background: rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
+            padding: 9px 16px;
+            border-radius: 999px;
+            background: #fdf2f8;
+            border: 1px solid #f9a8d4;
             font-weight: 500;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 13px;
+            transition: all 0.22s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav a:hover {
+            background: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(190, 24, 93, 0.15);
         }
 
         .nav a:last-child {
-            background: #b43074ff;
+            background: #fecaca;
+            border-color: #f97373;
+            color: #b91c1c;
         }
         
         .section-title {
-            font-size: 22px;
-            margin: 40px 0 20px 0;
-            color: #ff6bb5;
-            border-bottom: 2px solid #ffb3d9;
-            padding-bottom: 15px;
+            font-size: 20px;
+            margin: 26px 0 16px 0;
+            color: #ec4899;
             font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title span.icon {
+            font-size: 22px;
         }
         
         .form-group {
             display: grid;
-            gap: 20px;
-            margin-bottom: 30px;
-            padding: 30px;
-            background: linear-gradient(135deg, #fff5f9 0%, #ffebf2 100%);
-            border-radius: 15px;
-            border: 1px solid #ffb3d9;
-            box-shadow: 0 5px 15px rgba(255, 179, 217, 0.3);
+            gap: 18px;
+            margin-bottom: 24px;
+            padding: 22px 20px 20px;
+            background: #fff7fb;
+            border-radius: 18px;
+            border: 1px solid #fed7e2;
+            box-shadow: 0 8px 24px rgba(236, 72, 153, 0.12);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .form-group:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 32px rgba(236, 72, 153, 0.18);
         }
         
         .form-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 14px;
         }
         
         input, textarea, select {
-            padding: 15px;
-            border: 2px solid #ffb3d9;
+            padding: 11px 12px;
+            border: 1px solid #fecdd3;
             border-radius: 10px;
-            font-size: 16px;
-            font-family: 'Poppins', Arial;
-            transition: all 0.3s ease;
-            background: white;
+            font-size: 14px;
+            font-family: 'Poppins', Arial, sans-serif;
+            background: #ffffff;
+            transition: border 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
         }
         
         input:focus, textarea:focus, select:focus {
             outline: none;
-            border-color: #ff6bb5;
-            box-shadow: 0 0 10px rgba(255, 107, 181, 0.3);
-            transform: scale(1.02);
+            border-color: #ec4899;
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.18);
+            transform: translateY(-1px);
         }
         
         textarea {
             resize: vertical;
-            min-height: 100px;
+            min-height: 90px;
         }
         
         button {
-            padding: 15px 25px;
+            padding: 11px 20px;
             border: none;
-            border-radius: 10px;
+            border-radius: 999px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            transition: all 0.22s ease;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
         
         .btn-primary {
-            background: #ff6bb5;
+            background: #ec4899;
             color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px rgba(236, 72, 153, 0.45);
         }
         
         .btn-update {
-            background: linear-gradient(135deg, #5cb85c 0%, #4cae4c 100%);
+            background: #16a34a; /* green solid */
             color: white;
-            padding: 10px 18px;
-            font-size: 14px;
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .btn-update:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 7px 16px rgba(22, 163, 74, 0.45);
         }
 
         .btn-delete {
-            background: linear-gradient(135deg, #d10000ff 0%, #c9302c 100%);
+            background: #dc2626; /* red solid */
             color: white;
-            padding: 10px 18px;
-            font-size: 14px;
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .btn-delete:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 7px 16px rgba(220, 38, 38, 0.45);
         }
         
         .btn-edit {
-            background:#5cb85c;
+            background: #f97316; /* orange solid */
             color: white;
-            padding: 10px 18px;
-            font-size: 14px;
+            padding: 8px 16px;
+            font-size: 13px;
         }
+
+        .btn-edit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 7px 16px rgba(249, 115, 22, 0.45);
+        }
+
+        .table-wrapper {
+            width: 100%;
+            margin-top: 16px;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+            background: #fff;
+        }
+
+        .table-scroll {
+            width: 100%;
+            overflow-x: auto;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 30px;
             background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            table-layout: auto; /* Agar kolom menyesuaikan konten */
+            table-layout: auto;
+            min-width: 800px; /* di layar besar masih tabel */
         }
         
+        thead {
+            background: #ec4899;
+        }
+
         th {
-            background: #ff4d94;
-            color: #561d39ff;
-            padding: 20px;
-            text-align: center;
+            color: #fdf2f8;
+            padding: 14px 16px;
+            text-align: left;
             font-weight: 600;
-            font-size: 16px;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            font-size: 13px;
+            white-space: nowrap;
         }
         
         td {
-            padding: 15px 20px;
-            border-bottom: 1px solid #f0f0f0;
-            vertical-align: top; /* Agar teks di atas jika ada wrap */
+            padding: 13px 16px;
+            border-bottom: 1px solid #f3e8ff;
+            vertical-align: top;
+            font-size: 13px;
+        }
+
+        tr.product-row {
+            transition: background 0.15s ease, transform 0.12s ease, box-shadow 0.12s ease;
         }
         
-        tr:nth-child(even) {
-            background: #fff9fb;
+        tr.product-row:nth-child(even) {
+            background: #fff9fd;
+        }
+        
+        tr.product-row:hover {
+            background: #fdf2f8;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 22px rgba(236, 72, 153, 0.15);
         }
         
         .product-img {
-            width: 60px;
-            height: 60px;
+            width: 64px;
+            height: 64px;
             object-fit: cover;
-            border-radius: 10px;
-            border: 2px solid #ffb3d9;
-            transition: transform 0.3s ease;
+            border-radius: 14px;
+            border: 2px solid #fecdd3;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .product-img:hover {
+            transform: scale(1.06);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+            border-color: #ec4899;
         }
 
         .description-cell {
@@ -284,73 +364,199 @@ $products = $conn->query("SELECT id, name, price, description, image, category F
             overflow-wrap: break-word;
         }
         
+        .price-badge {
+            display: inline-flex;
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: #fef3c7;
+            color: #92400e;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .category-pill {
+            display: inline-flex;
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: #e0f2fe;
+            color: #1d4ed8;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
         .action-cell {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
             align-items: center;
         }
         
         .edit-form {
-            display: none;
-            width: 100%;
-            margin-top: 10px;
-            padding: 15px;
-            background: #f9f9f9;
-            border-radius: 10px;
-            border: 1px solid #ffb3d9;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.28s ease, opacity 0.26s ease, margin-top 0.26s ease;
         }
         
         .edit-form.show {
-            display: block;
+            max-height: 280px;
+            opacity: 1;
+            margin-top: 10px;
         }
         
+        .edit-form-inner {
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+
         .edit-form .form-row {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 10px;
-            flex-wrap: wrap;
-            align-items: center;
+            align-items: flex-start;
         }
-        
-        .edit-form input, .edit-form textarea, .edit-form select {
-            flex: 1;
-            min-width: 120px;
-        }
-        
+
         .edit-form textarea {
             min-height: 60px;
         }
         
-        @media (max-width: 768px) {
+        /* RESPONSIVE UMUM (tablet besar ke bawah) */
+        @media (max-width: 900px) {
             .container {
-                padding: 20px;
+                padding: 20px 16px 26px;
+                border-radius: 18px;
             }
             
             .header {
                 flex-direction: column;
-                gap: 20px;
+                align-items: flex-start;
+                gap: 12px;
             }
             
             .nav {
                 flex-wrap: wrap;
-                justify-content: center;
             }
-            
+
+            .section-title {
+                margin-top: 20px;
+            }
+        }
+        
+        /* IPAD & HP => MODE CARD */
+        @media (max-width: 1024px) {
+            body {
+                padding: 12px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .nav {
+                width: 100%;
+            }
+
+            .nav a {
+                flex: 1 1 auto;
+                justify-content: center;
+                font-size: 12px;
+                padding: 8px 10px;
+            }
+
+            .form-group {
+                padding: 16px 12px;
+            }
+
             .form-row {
                 grid-template-columns: 1fr;
             }
-            
-            table {
-                font-size: 14px;
+
+            button {
+                width: 100%;
             }
-            
+
+            .table-wrapper {
+                box-shadow: none;
+                background: transparent;
+            }
+
+            .table-scroll {
+                overflow-x: visible;
+            }
+
+            table {
+                min-width: 0;
+                border-collapse: separate;
+                border-spacing: 0 12px; /* jarak antar card */
+            }
+
+            thead {
+                display: none;
+            }
+
+            tbody {
+                display: block;
+            }
+
+            tr.product-row {
+                display: block;
+                background: #ffffff;
+                border-radius: 16px;
+                box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+                padding: 10px 12px;
+                margin-bottom: 10px;
+                transform: none;
+            }
+
+            tr.product-row:hover {
+                transform: translateY(-1px);
+            }
+
+            td {
+                display: flex;
+                padding: 6px 0;
+                border: none;
+                font-size: 13px;
+                align-items: flex-start;
+            }
+
+            td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                font-size: 12px;
+                color: #9ca3af;
+                margin-right: 8px;
+                min-width: 80px;
+                max-width: 40%;
+            }
+
+            td.cell-image {
+                justify-content: center;
+            }
+
+            td.cell-image::before {
+                content: '';
+                display: none;
+            }
+
+            .product-img {
+                width: 80px;
+                height: 80px;
+                margin-bottom: 4px;
+            }
+
             .action-cell {
                 flex-direction: column;
                 align-items: stretch;
+                width: 100%;
             }
-            
-            .edit-form .form-row {
-                flex-direction: column;
+
+            .action-cell button,
+            .action-cell form button {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
@@ -358,22 +564,25 @@ $products = $conn->query("SELECT id, name, price, description, image, category F
 <body>
 <div class="container">
     <div class="header">
-        <h1>📦 Kelola Produk</h1>
+        <h1><span>📦</span>Kelola Produk</h1>
         <div class="nav">
-            <a href="admin_users.php">Kelola User</a>
-            <a href="admin_transactions.php">Kelola Transaksi</a>
-            <a href="../auth/logout.php">Logout</a>
+            <a href="admin_users.php">👥 Kelola User</a>
+            <a href="admin_transactions.php">💳 Kelola Transaksi</a>
+            <a href="../auth/logout.php">🚪 Logout</a>
         </div>
     </div>
 
-    <h2 class="section-title">➕ Tambah Produk Baru</h2>
+    <h2 class="section-title">
+        <span class="icon">➕</span>
+        <span>Tambah Produk Baru</span>
+    </h2>
     <form method="post" enctype="multipart/form-data">
         <div class="form-group">
             <div class="form-row">
                 <input type="text" name="name" placeholder="Nama produk" required>
                 <input type="number" name="price" placeholder="Harga (Rp)" min="1" required>
             </div>
-            <textarea name="description" placeholder="Deskripsi produk"></textarea>
+            <textarea name="description" placeholder="Deskripsi produk (opsional)"></textarea>
             <div class="form-row">
                 <select name="category" required>
                     <option value="">-- Pilih Kategori --</option>
@@ -382,65 +591,95 @@ $products = $conn->query("SELECT id, name, price, description, image, category F
                     <?php endforeach; ?>
                 </select>
                 <input type="file" name="image" accept="image/*">
-                <button class="btn-primary" name="tambah_produk">Tambah Produk</button>
+                <button class="btn-primary" name="tambah_produk">
+                    <span>Tambah Produk</span>
+                </button>
             </div>
         </div>
     </form>
 
-    <h2 class="section-title">📋 Daftar Produk</h2>
-    <table>
-        <tr>
-            <th>Gambar</th>
-            <th>Nama</th>
-            <th>Harga</th>
-            <th>Deskripsi</th>
-            <th>Kategori</th>
-            <th>Aksi</th>
-        </tr>
+    <h2 class="section-title">
+        <span class="icon">📋</span>
+        <span>Daftar Produk</span>
+    </h2>
 
-        <?php while($p = $products->fetch_assoc()) { ?>
-        <tr>
-            <td>
-                <img src="../assets/<?= htmlspecialchars($p['image']) ?>" alt="<?= htmlspecialchars($p['name']) ?>" class="product-img">
-            </td>
-            <td><?= htmlspecialchars($p['name']) ?></td>
-            <td>Rp <?= number_format($p['price'], 0, ',', '.') ?></td>
-            <td class="description-cell"><?= htmlspecialchars($p['description']) ?></td>
-            <td><?= htmlspecialchars(isset($categories[$p['category']]) ? $categories[$p['category']] : $p['category']) ?></td>
-            <td>
-                <div class="action-cell">
-                    <button class="btn-edit" onclick="toggleEdit(<?= $p['id'] ?>)">Edit</button>
-                    <form method="post" style="display:inline;" onsubmit="return confirm('Yakin hapus produk ini?')">
-                        <input type="hidden" name="id" value="<?= $p['id'] ?>">
-                        <button class="btn-delete" name="hapus_produk">Hapus</button>
-                    </form>
-                </div>
-                <div class="edit-form" id="edit-<?= $p['id'] ?>">
-                    <form method="post">
-                        <input type="hidden" name="id" value="<?= $p['id'] ?>">
-                        <div class="form-row">
-                            <input type="text" name="name" value="<?= htmlspecialchars($p['name']) ?>" required>
-                            <input type="number" name="price" value="<?= $p['price'] ?>" required>
-                            <textarea name="description"><?= htmlspecialchars($p['description']) ?></textarea>
-                            <select name="category">
-                                <option value="">-- Pilih Kategori --</option>
-                                <?php foreach ($categories as $k => $label): ?>
-                                    <option value="<?php echo htmlspecialchars($k); ?>" <?php if ($p['category'] === $k) echo 'selected'; ?>><?php echo htmlspecialchars($label); ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                            <button class="btn-update" name="update_produk">Update</button>
+    <div class="table-wrapper">
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Gambar</th>
+                        <th>Nama</th>
+                        <th>Harga</th>
+                        <th>Deskripsi</th>
+                        <th>Kategori</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php while($p = $products->fetch_assoc()) { ?>
+                <tr class="product-row">
+                    <td class="cell-image" data-label="Gambar">
+                        <img src="../assets/<?= htmlspecialchars($p['image']) ?>" alt="<?= htmlspecialchars($p['name']) ?>" class="product-img">
+                    </td>
+                    <td data-label="Nama">
+                        <?= htmlspecialchars($p['name']) ?>
+                    </td>
+                    <td data-label="Harga">
+                        <span class="price-badge">
+                            Rp <?= number_format($p['price'], 0, ',', '.') ?>
+                        </span>
+                    </td>
+                    <td class="description-cell" data-label="Deskripsi">
+                        <?= htmlspecialchars($p['description']) ?>
+                    </td>
+                    <td data-label="Kategori">
+                        <span class="category-pill">
+                            <?= htmlspecialchars(isset($categories[$p['category']]) ? $categories[$p['category']] : $p['category']) ?>
+                        </span>
+                    </td>
+                    <td data-label="Aksi">
+                        <div class="action-cell">
+                            <button type="button" class="btn-edit" onclick="toggleEdit(<?= $p['id'] ?>)">Edit</button>
+                            <form method="post" style="display:inline;" onsubmit="return confirm('Yakin hapus produk ini?')">
+                                <input type="hidden" name="id" value="<?= $p['id'] ?>">
+                                <button class="btn-delete" name="hapus_produk">Hapus</button>
+                            </form>
                         </div>
-                    </form>
-                </div>
-            </td>
-        </tr>
-        <?php } ?>
-    </table>
+                        <div class="edit-form" id="edit-<?= $p['id'] ?>">
+                            <div class="edit-form-inner">
+                                <form method="post">
+                                    <input type="hidden" name="id" value="<?= $p['id'] ?>">
+                                    <div class="form-row">
+                                        <input type="text" name="name" value="<?= htmlspecialchars($p['name']) ?>" required>
+                                        <input type="number" name="price" value="<?= $p['price'] ?>" required>
+                                        <textarea name="description"><?= htmlspecialchars($p['description']) ?></textarea>
+                                        <select name="category">
+                                            <option value="">-- Pilih Kategori --</option>
+                                            <?php foreach ($categories as $k => $label): ?>
+                                                <option value="<?php echo htmlspecialchars($k); ?>" <?php if ($p['category'] === $k) echo 'selected'; ?>>
+                                                    <?php echo htmlspecialchars($label); ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <button class="btn-update" name="update_produk">Simpan Perubahan</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <?php } ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <script>
 function toggleEdit(id) {
     const form = document.getElementById('edit-' + id);
+    if (!form) return;
     form.classList.toggle('show');
 }
 </script>

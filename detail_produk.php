@@ -26,9 +26,9 @@ $rating_count = $rating_data ? (int)$rating_data['cnt'] : 0;
 $stock = isset($product['stock']) ? (int)$product['stock'] : 0;
 
 function renderStars($rating) {
-    $fullStar = '<svg xmlns="http://www.w3.org/2000/svg" fill="#ffd700" viewBox="0 0 24 24" width="24" height="24"><path d="M12 17.27l6.18 3.73-1.64-7.19 5.46-4.73-7.28-.62L12 2 10.27 8.46l-7.28.62 5.46 4.73-1.64 7.19z"/></svg>';
-    $halfStar = '<svg xmlns="http://www.w3.org/2000/svg" fill="url(#half-grad)" viewBox="0 0 24 24" width="24" height="24"><defs><linearGradient id="half-grad"><stop offset="50%" stop-color="#ffd700"/><stop offset="50%" stop-color="#ddd"/></linearGradient></defs><path d="M12 17.27l6.18 3.73-1.64-7.19 5.46-4.73-7.28-.62L12 2z"/></svg>';
-    $emptyStar = '<svg xmlns="http://www.w3.org/2000/svg" fill="#ddd" viewBox="0 0 24 24" width="24" height="24"><path d="M12 17.27l6.18 3.73-1.64-7.19 5.46-4.73-7.28-.62L12 2 10.27 8.46l-7.28.62 5.46 4.73-1.64 7.19z"/></svg>';
+    $fullStar = '<svg xmlns="http://www.w3.org/2000/svg" fill="#ffd700" viewBox="0 0 24 24" width="20" height="20"><path d="M12 17.27l6.18 3.73-1.64-7.19 5.46-4.73-7.28-.62L12 2 10.27 8.46l-7.28.62 5.46 4.73-1.64 7.19z"/></svg>';
+    $halfStar = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"><defs><linearGradient id="half-grad"><stop offset="50%" stop-color="#ffd700"/><stop offset="50%" stop-color="#e5e7eb"/></linearGradient></defs><path d="M12 17.27l6.18 3.73-1.64-7.19 5.46-4.73-7.28-.62L12 2z" fill="url(#half-grad)"/><path d="M12 2l-1.73 6.46-7.28.62 5.46 4.73-1.64 7.19L12 17.27z" fill="#e5e7eb"/></svg>';
+    $emptyStar = '<svg xmlns="http://www.w3.org/2000/svg" fill="#e5e7eb" viewBox="0 0 24 24" width="20" height="20"><path d="M12 17.27l6.18 3.73-1.64-7.19 5.46-4.73-7.28-.62L12 2 10.27 8.46l-7.28.62 5.46 4.73-1.64 7.19z"/></svg>';
 
     $starsHTML = '';
     for ($i=1; $i <= 5; $i++) {
@@ -42,182 +42,303 @@ function renderStars($rating) {
     }
     return $starsHTML;
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
   <title>Detail Produk - <?= htmlspecialchars($product['name'], ENT_QUOTES); ?></title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    :root {
+      --bg: #fdf2f8;
+      --card-bg: #ffffff;
+      --pink-light: #fecdd3;
+      --pink-mid: #ec4899;
+      --pink-dark: #be185d;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --shadow-main: 0 12px 30px rgba(0,0,0,0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
     body {
-      margin: 0; 
       font-family: 'Poppins', sans-serif;
-      background: #fcfcfc;
-      color: #333;
-      padding: 40px 20px;
+      background: var(--bg);
+      color: var(--text-main);
+      padding: 18px;
       display: flex;
       justify-content: center;
-      min-height: 100vh;
-    }
-    .wrapper {
-      max-width: 1000px;
-      width: 100%;
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 12px 28px rgba(244, 143, 177, 0.15);
-      padding: 30px 40px;
-      box-sizing: border-box;
-    }
-    .back-link {
-      display: inline-block;
-      margin-bottom: 25px;
-      text-decoration: none;
-      color: #f48fb1;
-      font-weight: 600;
-      border: 2px solid #f48fb1;
-      padding: 8px 16px;
-      border-radius: 30px;
-      transition: all 0.3s ease;
-    }
-    .back-link:hover {
-      background: #f48fb1;
-      color: white;
-    }
-    .container {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-    .top {
-      display: flex;
-      gap: 40px;
       align-items: flex-start;
     }
-    .image-box {
-      flex: 0 0 350px;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 10px 24px rgba(244, 143, 177, 0.25);
-      background: linear-gradient(135deg, #fdeef4, #fbe6ec);
-    }
-    .image-box img {
-      display: block;
+
+    .wrapper {
+      max-width: 1100px;
       width: 100%;
-      border-radius: 16px;
-      object-fit: cover;
-      height: 350px;
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-main);
+      padding: 24px 22px 26px;
     }
-    .desc-label {
-      font-size: 1.5rem;
-      font-weight: 850;
-      margin-bottom: 5px;
-      background: linear-gradient(90deg, #b74168ff, #bc477b);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+
+    /* TOP BAR */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f3e8ff;
+      flex-wrap: wrap;
     }
-    .desc {
-      font-size: 1rem;
-      line-height: 1.5;
-      color: #474747ff;
-      white-space: pre-line;
-      margin-top: 0;
-    }
-    .info {
-      flex: 1 1 auto;
+
+    .top-bar-left {
       display: flex;
       flex-direction: column;
+      gap: 4px;
     }
-    .info h1 {
-      font-size: 2.2rem;
-      margin: 0 0 12px 0;
+
+    .top-bar-left span.title {
       font-weight: 700;
-      color: #bc477b;
-    }
-    .price {
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin: 8px 0 12px;
-      background: linear-gradient(90deg, #f586abff, #bc477b);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .stock {
-      font-weight: 600;
-      color: #444;
-      margin-bottom: 5px;
-    }
-    .stock.out {
-      color: #e57373;
-      font-weight: 700;
-      font-size: 1.1rem;
-    }
-    .rating {
+      font-size: 18px;
+      color: var(--pink-dark);
       display: flex;
       align-items: center;
-      margin-bottom: 18px;
-      gap: 12px;
+      gap: 6px;
     }
-    .rating-stars svg {
-      width: 26px;
-      height: 26px;
+
+    .top-bar-left span.subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
     }
-    .rating-text {
-      font-size: 1rem;
-      color: #957299;
-      font-weight: 600;
-    }
-    .qty-cart {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-top: 8px;
-    }
-    .qty-label {
-      font-weight: 600;
-      color: #444;
-      user-select: none;
-      min-width: 40px;
-    }
-    .qty-box {
+
+    .back-link {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      border: 1.6px solid #e0a9bb;
-      border-radius: 12px;
+      text-decoration: none;
+      color: var(--pink-mid);
+      font-weight: 600;
+      border: 1px solid var(--pink-mid);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      transition: all 0.2s ease;
+      background: #fff;
+    }
+    .back-link span.icon {
+      font-size: 15px;
+    }
+    .back-link:hover {
+      background: var(--pink-mid);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+      gap: 26px;
+      align-items: flex-start;
+      margin-top: 10px;
+    }
+
+    /* IMAGE SIDE */
+    .image-box {
+      border-radius: var(--radius-lg);
       overflow: hidden;
-      background: #fce8f1;
+      box-shadow: 0 10px 26px rgba(236,72,153,0.25);
+      background: #fee2f2;
+      position: relative;
+    }
+
+    .image-box img {
+      display: block;
+      width: 100%;
+      height: 360px;
+      object-fit: cover;
+      border-radius: var(--radius-lg);
+    }
+
+    .image-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(255,255,255,0.9);
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--pink-dark);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* INFO SIDE */
+    .info {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .info h1 {
+      font-size: 22px;
+      margin: 0;
+      color: var(--pink-dark);
+      font-weight: 800;
+    }
+
+    .rating-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 4px;
+      flex-wrap: wrap;
+    }
+
+    .rating-stars svg {
+      flex-shrink: 0;
+    }
+
+    .rating-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #fef3c7;
+      color: #92400e;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .rating-text {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .price-row {
+      margin-top: 10px;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .price {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--pink-mid);
+    }
+
+    .price-label {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .stock-row {
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .stock-pill {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stock-pill.ok {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .stock-pill.out {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .stock-text {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .qty-cart {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .qty-label {
+      font-weight: 600;
+      color: #374151;
+      font-size: 13px;
       user-select: none;
     }
+
+    .qty-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid var(--pink-light);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: #fef2f7;
+      user-select: none;
+    }
+
     .qty-btn {
       background: transparent;
       border: none;
-      font-weight: 900;
-      font-size: 1.4rem;
+      font-weight: 700;
+      font-size: 18px;
       line-height: 1;
-      padding: 6px 12px;
-      color: #bc477b;
+      padding: 6px 10px;
+      color: var(--pink-mid);
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: background 0.2s ease, color 0.2s ease;
     }
+
     .qty-btn:hover:not(:disabled) {
-      background: #f48fb1;
-      color: white;
+      background: var(--pink-mid);
+      color: #fff;
     }
+
     .qty-btn:disabled {
       opacity: 0.4;
       cursor: not-allowed;
     }
+
     input[type="number"] {
       width: 70px;
       border: none;
       outline: none;
-      font-size: 1.1rem;
+      font-size: 14px;
       font-weight: 600;
       text-align: center;
       background: transparent;
-      color: #bc477b;
+      color: var(--pink-dark);
       font-family: 'Poppins', sans-serif;
       padding: 8px 0;
       -moz-appearance: textfield;
@@ -227,56 +348,103 @@ function renderStars($rating) {
       -webkit-appearance: none;
       margin: 0; 
     }
+
     .btn {
-      background: #bc477b;
+      background: var(--pink-mid);
       color: white;
       border: none;
-      padding: 12px 26px;
-      font-size: 1.1rem;
+      padding: 10px 18px;
+      font-size: 14px;
       font-weight: 700;
-      border-radius: 30px;
+      border-radius: 999px;
       cursor: pointer;
-      transition: background 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 6px 18px rgba(188, 71, 123, 0.45);
-      flex-shrink: 0;
+      transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+      box-shadow: 0 6px 18px rgba(236,72,153,0.5);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       white-space: nowrap;
     }
+
     .btn:hover:not(:disabled) {
-      background: #f48fb1;
-      box-shadow: 0 10px 28px rgba(244, 143, 177, 0.6);
+      background: var(--pink-dark);
+      box-shadow: 0 10px 26px rgba(190,24,93,0.6);
+      transform: translateY(-1px);
     }
+
     .btn:disabled {
-      background: #f7d3df;
-      color: #9e748e;
+      background: #f3e8ff;
+      color: #9ca3af;
       cursor: not-allowed;
       box-shadow: none;
+      transform: none;
     }
-    @media (max-width: 720px) {
+
+    /* DESC */
+    .desc-section {
+      margin-top: 20px;
+      padding-top: 12px;
+      border-top: 1px solid #f3e8ff;
+    }
+
+    .desc-label {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--pink-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .desc-label span.icon {
+      font-size: 18px;
+    }
+
+    .desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      white-space: pre-line;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 992px) {
+      body {
+        padding: 14px;
+      }
+      .wrapper {
+        padding: 20px 16px 22px;
+        border-radius: 16px;
+      }
       .container {
-        gap: 20px;
+        grid-template-columns: minmax(0, 1fr);
       }
-      .top {
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
+      .image-box img {
+        height: 320px;
       }
-      .image-box {
-        width: 100%;
-        max-width: 350px;
-        height: auto;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 10px;
+      }
+      .top-bar {
+        align-items: flex-start;
+      }
+      .container {
+        gap: 18px;
       }
       .image-box img {
         height: auto;
       }
       .qty-cart {
-        flex-wrap: wrap;
-      }
-      .qty-label {
-        min-width: auto;
+        flex-direction: column;
+        align-items: stretch;
       }
       .btn {
         width: 100%;
-        text-align: center;
+        justify-content: center;
       }
     }
   </style>
@@ -284,57 +452,85 @@ function renderStars($rating) {
 <body>
 
 <div class="wrapper">
-  <a href="home.php" class="back-link" aria-label="Kembali ke Daftar Produk">← Kembali ke Daftar Produk</a>
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <span class="title"><span>🛍️</span><span>Detail Produk</span></span>
+      <span class="subtitle">Lihat informasi lengkap sebelum menambahkan ke keranjang.</span>
+    </div>
+    <a href="home.php" class="back-link" aria-label="Kembali ke Daftar Produk">
+      <span class="icon">←</span>
+      <span>Kembali</span>
+    </a>
+  </div>
 
   <div class="container">
-    <div class="top">
-      <div class="image-box">
-        <img src="assets/<?= htmlspecialchars($product['image'], ENT_QUOTES); ?>" alt="<?= htmlspecialchars($product['name'], ENT_QUOTES); ?>">
-      </div>
+    <!-- IMAGE -->
+    <div class="image-box">
+      <img src="assets/<?= htmlspecialchars($product['image'], ENT_QUOTES); ?>" alt="<?= htmlspecialchars($product['name'], ENT_QUOTES); ?>">
+    </div>
 
-      <div class="info">
-        <h1><?= htmlspecialchars($product['name'], ENT_QUOTES); ?></h1>
+    <!-- INFO -->
+    <div class="info">
+      <h1><?= htmlspecialchars($product['name'], ENT_QUOTES); ?></h1>
 
-        <div class="rating" aria-label="Rating produk">
-          <div class="rating-stars" aria-hidden="true">
-            <?= $rating_count > 0 ? renderStars($avg_rating) : '' ?>
+      <div class="rating-row" aria-label="Rating produk">
+        <div class="rating-stars" aria-hidden="true">
+          <?= $rating_count > 0 ? renderStars($avg_rating) : '' ?>
+        </div>
+        <?php if ($rating_count > 0): ?>
+          <div class="rating-badge">
+            ⭐ <?= number_format($avg_rating,1) ?>/5
           </div>
           <div class="rating-text">
-            <?php if ($rating_count > 0): ?>
-              <?= number_format($avg_rating,1) ?> / 5 (<?= $rating_count ?> ulasan)
-            <?php else: ?>
-              Belum ada rating
-            <?php endif; ?>
+            <?= $rating_count ?> ulasan
           </div>
-        </div>
-
-        <div class="price" aria-label="Harga produk">Rp <?= number_format($product['price'], 0, ',', '.'); ?></div>
-
-        <?php if ($stock > 0): ?>
-        <div class="stock" aria-label="Stok tersedia">Stok: <strong><?= $stock; ?></strong></div>
         <?php else: ?>
-        <div class="stock out" aria-label="Stok habis">Stok Habis</div>
-        <?php endif; ?>
-
-        <div class="qty-cart" aria-label="Jumlah pembelian produk">
-          <div class="qty-label">QTY:</div>
-          <div class="qty-box" id="qty-box">
-            <button type="button" class="qty-btn" id="qty-decrease" aria-label="Kurangi jumlah">−</button>
-            <input type="number" id="qty-input" name="qty" value="1" min="1" step="1" aria-live="polite" aria-atomic="true" aria-label="Jumlah produk">
-            <button type="button" class="qty-btn" id="qty-increase" aria-label="Tambah jumlah">+</button>
+          <div class="rating-text">
+            Belum ada rating
           </div>
+        <?php endif; ?>
+      </div>
 
-          <button class="btn add-to-cart" id="add-to-cart-btn" data-id="<?= (int)$product['id']; ?>" <?= $stock === 0 ? 'disabled' : '' ?>>
-            Tambahkan ke Keranjang
-          </button>
+      <div class="price-row" aria-label="Harga produk">
+        <div class="price">Rp <?= number_format($product['price'], 0, ',', '.'); ?></div>
+        <div class="price-label">/ item</div>
+      </div>
+
+      <div class="stock-row">
+        <?php if ($stock > 0): ?>
+          <div class="stock-pill ok">
+            <span>✔</span><span>Tersedia</span>
+          </div>
+          <div class="stock-text">Stok: <strong><?= $stock; ?></strong> pcs</div>
+        <?php else: ?>
+          <div class="stock-pill out">
+            <span>✖</span><span>Stok Habis</span>
+          </div>
+        <?php endif; ?>
+      </div>
+
+      <div class="qty-cart" aria-label="Jumlah pembelian produk">
+        <div class="qty-label">Jumlah:</div>
+        <div class="qty-box" id="qty-box">
+          <button type="button" class="qty-btn" id="qty-decrease" aria-label="Kurangi jumlah">−</button>
+          <input type="number" id="qty-input" name="qty" value="1" min="1" step="1" aria-live="polite" aria-atomic="true" aria-label="Jumlah produk">
+          <button type="button" class="qty-btn" id="qty-increase" aria-label="Tambah jumlah">+</button>
         </div>
+
+        <button class="btn add-to-cart" id="add-to-cart-btn" data-id="<?= (int)$product['id']; ?>" <?= $stock === 0 ? 'disabled' : '' ?>>
+          <span>🛒</span><span>Tambahkan ke Keranjang</span>
+        </button>
       </div>
     </div>
+  </div>
 
-    <div>
-      <h2 class="desc-label">Deskripsi</h2>
-      <div class="desc"><?= nl2br(htmlspecialchars($product['description'], ENT_QUOTES)); ?></div>
-    </div>
+    <!-- DESKRIPSI -->
+  <div class="desc-section">
+    <h2 class="desc-label">
+      <span class="icon">📄</span>
+      <span>Deskripsi Produk</span>
+    </h2>
+    <div class="desc"><?= nl2br(htmlspecialchars($product['description'], ENT_QUOTES)); ?></div>
   </div>
 </div>
 
@@ -367,9 +563,8 @@ function renderStars($rating) {
           else if (parseInt(qtyInput.value) > stock) qtyInput.value = stock;
       }
 
-      if (stock === 0) {
+      if (stock === 0 && addBtn) {
           addBtn.disabled = true;
-          addBtn.style.opacity = 0.7;
       }
 
       function clampQty(val) {
@@ -415,7 +610,7 @@ function renderStars($rating) {
               if (qty < 1) qty = 1;
               if (qty > stock) qty = stock;
 
-              let yakin = confirm("Yakin ingin menambahkan " + qty + " item ke keranjang?");
+              const yakin = confirm("Yakin ingin menambahkan " + qty + " item ke keranjang?");
               if (!yakin) return;
 
               e.target.disabled = true;

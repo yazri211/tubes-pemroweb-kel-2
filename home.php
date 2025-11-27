@@ -14,17 +14,16 @@ if (!empty($_SESSION['user_id'])) {
 
 // ==================================================================
 
-
-$search = isset($_GET['q']) ? trim($_GET['q']) : '';
+// ambil parameter search & category
+$search   = isset($_GET['q']) ? trim($_GET['q']) : '';
 $category = isset($_GET['category']) ? trim($_GET['category']) : '';
 
 // prepare safe values
-$searchTerm = '%' . $search . '%';
-$searchSafe = mysqli_real_escape_string($conn, $searchTerm);
+$searchTerm   = '%' . $search . '%';
+$searchSafe   = mysqli_real_escape_string($conn, $searchTerm);
 $categorySafe = mysqli_real_escape_string($conn, $category);
 
-// build query with optional filters
-// NOTE: fragrance is allowed now (removed exclusion)
+// build query dengan filter opsional
 $sql = "SELECT * FROM products WHERE 1";
 
 if (!empty($search)) {
@@ -32,7 +31,6 @@ if (!empty($search)) {
 }
 
 if (!empty($category)) {
-    // still allow filtering by categories including 'fragrance'
     $sql .= " AND category = '$categorySafe'";
 }
 
@@ -44,17 +42,17 @@ if (!$result) {
     die("Query gagal: " . mysqli_error($conn));
 }
 
-// categories list: fragrance included
+// categories list
 $categories = [
-    'makeup' => 'Makeup',
-    'skincare' => 'Skincare',
-    'haircare' => 'Haircare',
-    'bodycare' => 'Bodycare',
-    'nailcare' => 'Nailcare',
-    'fragrance' => 'Fragrance'
+    'makeup'     => 'Makeup',
+    'skincare'   => 'Skincare',
+    'haircare'   => 'Haircare',
+    'bodycare'   => 'Bodycare',
+    'nailcare'   => 'Nailcare',
+    'fragrance'  => 'Fragrance'
 ];
 
-// path to placeholder image (make sure this file exists: assets/placeholder.png)
+// placeholder image
 $placeholder = 'assets/placeholder.png';
 ?>
 <!DOCTYPE html>
@@ -82,9 +80,6 @@ $placeholder = 'assets/placeholder.png';
         --transition-medium: 220ms;
     }
 
-    /* ==========================
-       FLUID TYPOGRAPHY (clamp)
-    */
     html {
       font-size: clamp(12px, calc(10px + 1.2vw), 16px);
       -webkit-font-smoothing: antialiased;
@@ -195,7 +190,6 @@ $placeholder = 'assets/placeholder.png';
     }
     .nav-search button[type="submit"]{ padding:0.5625rem 0.875rem; border-radius:0.625rem; background:var(--accent); color:#fff; font-weight:700; cursor:pointer; box-shadow:0 0.5rem 1.25rem rgba(255,77,148,0.06); }
 
-    /* clear-search */
     .clear-search {
         position: absolute;
         right: calc(0.75rem + 3rem + 0.5rem);
@@ -213,7 +207,6 @@ $placeholder = 'assets/placeholder.png';
     .clear-search:hover, .clear-search:focus { color: var(--accent); background: rgba(255,77,148,0.04); }
     .clear-search:focus { outline: 0.125rem solid rgba(255,77,148,0.12); }
 
-    /* rest of page */
     main.container{
         max-width:var(--max-w);
         margin:1.125rem auto;
@@ -228,7 +221,6 @@ $placeholder = 'assets/placeholder.png';
     .cat-btn{ padding:0.5rem 0.875rem; border-radius:999px; border:0.0625rem solid #ffdfe8; background:#fff; color:var(--accent); cursor:pointer; font-weight:600; font-size:0.875rem; white-space:nowrap; }
     .cat-btn.active{ background:var(--accent); color:#fff; border-color:var(--accent) }
 
-    /* DEFAULT GRID */
     .product { display:grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; align-items:stretch; }
     .product-card{ background:#fff; border-radius:0.875rem; box-shadow:var(--card-shadow); overflow:hidden; display:flex; flex-direction:column; transition: transform .18s ease, box-shadow .18s ease; min-height:23.75rem; }
     .product-card:hover{ transform:translateY(-0.375rem); box-shadow:0 1.25rem 2.5rem rgba(255,105,180,0.08) }
@@ -250,10 +242,30 @@ $placeholder = 'assets/placeholder.png';
     .btn-ghost{ background:#fff; border:0.0625rem solid #ffdfe8; color:var(--accent); min-width:3.25rem; height:2.75rem; display:inline-flex; align-items:center; justify-content:center; border-radius:0.75rem; }
     .icon-btn{ width:3rem; min-width:3rem; height:2.75rem; border-radius:0.75rem; font-size:1.125rem; }
 
+    /* === Saran 4: badge stok habis + disabled style === */
+    .badge-stock-out{
+        position:absolute;
+        top:0.75rem;
+        left:0.75rem;
+        padding:0.25rem 0.625rem;
+        font-size:0.75rem;
+        font-weight:700;
+        border-radius:999px;
+        background:rgba(220,0,78,0.92);
+        color:#fff;
+        box-shadow:0 0.375rem 0.875rem rgba(220,0,78,0.35);
+    }
+
+    button[disabled],
+    .btn[disabled]{
+        opacity:0.6;
+        cursor:not-allowed;
+        box-shadow:none;
+    }
+
     .toast { position: fixed; right: 1.25rem; bottom: 1.25rem; background: var(--toast-bg); color: #fff; padding: 0.625rem 0.875rem; border-radius: 0.625rem; box-shadow: 0 0.5rem 1.875rem rgba(0,0,0,0.3); z-index: 9999; opacity: 0; transform: translateY(8px); transition: opacity .22s ease, transform .22s ease; pointer-events: none; font-weight:700; }
     .toast.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
-    /* Keep single product card same visual size as multiple cards (desktop/tablet) */
     .product.single {
         display: flex;
         justify-content: center;
@@ -266,7 +278,6 @@ $placeholder = 'assets/placeholder.png';
         margin: 0;
     }
 
-    /* Tablet & responsive grid rules */
     @media (max-width: 1199px) and (min-width: 992px) {
         .product { grid-template-columns: repeat(3, 1fr); gap: 1.125rem; }
         .product-card { min-height:22.5rem; }
@@ -290,7 +301,6 @@ $placeholder = 'assets/placeholder.png';
         .btn-primary { height:3rem; font-size:0.9375rem; }
     }
 
-    /* RESPONSIVE - other nav adjustments */
     @media (max-width:900px){
         .nav-links{ display:none; }
         .nav-search { flex:1; justify-content:flex-end; }
@@ -383,6 +393,11 @@ $placeholder = 'assets/placeholder.png';
 
         .btn-primary { height:3.125rem; font-size:1rem; border-radius:0.75rem; }
         .btn-ghost { height:3.125rem; width:3.125rem; border-radius:0.75rem; }
+
+        /* Saran 2: extra padding top supaya konten nggak ketutup header di HP kecil */
+        main.container{
+            padding-top: calc(var(--nav-height) + 2.75rem);
+        }
     }
 
     @media (max-width:360px){
@@ -421,6 +436,36 @@ $placeholder = 'assets/placeholder.png';
         object-fit: cover;
         filter: brightness(65%);
         display: block;
+    }
+
+    /* Saran 2: teks overlay di hero slide */
+    .hero-overlay{
+        position:absolute;
+        left: 1.75rem;
+        bottom: 1.75rem;
+        max-width: 340px;
+        color:#fff;
+        text-shadow: 0 4px 12px rgba(0,0,0,0.55);
+    }
+    .hero-overlay h2{
+        margin:0 0 0.25rem;
+        font-size:1.4rem;
+        font-weight:800;
+    }
+    .hero-overlay p{
+        margin:0;
+        font-size:0.92rem;
+        opacity:0.95;
+    }
+
+    @media(max-width: 767px){
+        .hero-overlay{
+            left: 1rem;
+            bottom: 1rem;
+            max-width: 70%;
+        }
+        .hero-overlay h2{ font-size:1.1rem; }
+        .hero-overlay p{ font-size:0.8rem; }
     }
 
     .hero-nav {
@@ -484,9 +529,6 @@ $placeholder = 'assets/placeholder.png';
             height: 290px;
             border-radius: 0.75rem;
         }
-        .hero-overlay {
-            padding: 1.25rem 1.5rem;
-        }
         .hero-nav {
             width: 2.25rem;
             height: 2.25rem;
@@ -497,12 +539,6 @@ $placeholder = 'assets/placeholder.png';
         .hero {
             height: 230px;
             margin-bottom: 1.25rem;
-        }
-        .hero-overlay h2 {
-            font-size: 1.05rem;
-        }
-        .hero-overlay p {
-            font-size: 0.8125rem;
         }
         .hero-nav {
             width: 2rem;
@@ -529,7 +565,7 @@ $placeholder = 'assets/placeholder.png';
                 </div>
             </div>
 
-            <!-- RIGHT ACTIONS: search moved here so it sits beside the cart -->
+            <!-- RIGHT ACTIONS -->
             <div class="nav-actions" role="group" aria-label="Aksi">
                 <div class="nav-search" id="navSearch" aria-label="Pencarian produk">
                     <form method="GET" action="" role="search" aria-label="Form pencarian">
@@ -546,9 +582,7 @@ $placeholder = 'assets/placeholder.png';
                             value="<?php echo htmlspecialchars($search, ENT_QUOTES); ?>"
                             aria-label="Cari produk">
 
-                        <!-- clear (x) button: muncul hanya kalau ada teks -->
                         <span id="clearSearch" class="clear-search" role="button" tabindex="0" aria-label="Bersihkan pencarian">✖</span>
-
                         <button type="submit" aria-label="Cari">Cari</button>
                     </form>
                 </div>
@@ -586,7 +620,6 @@ $placeholder = 'assets/placeholder.png';
                     </div>
                 </div>
             </div>
-
         </div>
     </header>
 
@@ -623,16 +656,14 @@ $placeholder = 'assets/placeholder.png';
             <?php endforeach; ?>
         </ul>
 
-        <!-- HERO SLIDER: tampil hanya kalau TIDAK sedang search -->
-        <?php if ($search === ''): ?>
+        <!-- HERO SLIDER: hanya di SEMUA (tanpa category) & tanpa search -->
+        <?php if ($search === '' && $category === ''): ?>
         <section class="hero" aria-label="Promo utama">
             <div class="hero-track" id="heroTrack">
-                <!-- SLIDE 1 -->
                 <div class="hero-slide">
                     <img class="hero-img" src="assets/iklan.jpg" alt="Promo spesial Beauty Shop">
                 </div>
 
-                <!-- SLIDE 2 (opsional, pastikan file ada) -->
                 <div class="hero-slide">
                     <img class="hero-img" src="assets/iklan2.jpg" alt="Promo skincare">
                     <div class="hero-overlay">
@@ -641,7 +672,6 @@ $placeholder = 'assets/placeholder.png';
                     </div>
                 </div>
 
-                <!-- SLIDE 3 (opsional) -->
                 <div class="hero-slide">
                     <img class="hero-img" src="assets/iklan3.jpg" alt="Promo fragrance">
                     <div class="hero-overlay">
@@ -671,11 +701,16 @@ $placeholder = 'assets/placeholder.png';
                     $catLabel = isset($categories[$card['category']]) ? $categories[$card['category']] : ucfirst($card['category']);
                     $price = number_format($card['price'], 0, ',', '.');
                     $stock = isset($card['stock']) ? (int)$card['stock'] : null;
+                    $habis = ($stock !== null && $stock <= 0);
                     ?>
                     <article class="product-card" aria-labelledby="p-<?php echo (int)$card['id']; ?>">
                         <div class="img-wrap" role="img" aria-label="<?php echo htmlspecialchars($card['name'], ENT_QUOTES); ?>">
+                            <?php if ($habis): ?>
+                                <span class="badge-stock-out">Stok habis</span>
+                            <?php endif; ?>
+
                             <a href="detail_produk.php?id=<?php echo (int)$card['id']; ?>" style="display:block;width:100%;height:100%;">
-                                <img src="<?php echo $imagePath; ?> "
+                                <img src="<?php echo $imagePath; ?>"
                                      alt="<?php echo htmlspecialchars($card['name'], ENT_QUOTES); ?>"
                                      loading="lazy"
                                      onerror="this.onerror=null;this.src='<?php echo $placeholder; ?>';">
@@ -699,13 +734,24 @@ $placeholder = 'assets/placeholder.png';
                             </div>
 
                             <div class="card-actions">
-                                <button class="btn btn-primary" onclick="location.href='checkout/checkout.php?product_id=<?php echo (int)$card['id']; ?>'">Beli sekarang</button>
+                                <!-- Saran 4: tombol beli sekarang mengikuti stok -->
+                                <button
+                                    class="btn btn-primary"
+                                    <?php echo $habis ? 'disabled title="Stok habis"' : ''; ?>
+                                    <?php if (!$habis): ?>
+                                        onclick="location.href='checkout/checkout.php?product_id=<?php echo (int)$card['id']; ?>'"
+                                    <?php endif; ?>
+                                >
+                                    <?php echo $habis ? 'Stok habis' : 'Beli sekarang'; ?>
+                                </button>
 
+                                <!-- Saran 4: add-to-cart disable jika stok habis -->
                                 <button class="btn btn-ghost icon-btn add-to-cart"
                                         data-id="<?php echo (int)$card['id']; ?>"
                                         data-logged="<?php echo $isLoggedIn ? '1' : '0'; ?>"
-                                        aria-label="Tambah ke keranjang"
-                                        title="Tambah ke keranjang">
+                                        aria-label="<?php echo $habis ? 'Stok habis' : 'Tambah ke keranjang'; ?>"
+                                        title="<?php echo $habis ? 'Stok habis' : 'Tambah ke keranjang'; ?>"
+                                        <?php echo $habis ? 'disabled aria-disabled="true"' : ''; ?>>
                                     🛒
                                 </button>
                             </div>
@@ -724,12 +770,9 @@ $placeholder = 'assets/placeholder.png';
         </div>
     </main>
 
-    <!-- TOAST -->
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-    <!-- SCRIPTS -->
     <script>
-    // toast helper
     function showToast(message, timeout = 2000) {
         const t = document.getElementById('toast');
         if (!t) return;
@@ -739,7 +782,6 @@ $placeholder = 'assets/placeholder.png';
         t._hideTimer = setTimeout(() => t.classList.remove('show'), timeout);
     }
 
-    // update cart count
     function updateCartCount() {
         fetch("cart/cart_count.php", {
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
@@ -772,7 +814,6 @@ $placeholder = 'assets/placeholder.png';
         });
     })();
 
-    // add-to-cart handler
     document.addEventListener('click', function (e) {
         const btn = e.target.closest('.add-to-cart');
         if (!btn) return;
@@ -785,6 +826,11 @@ $placeholder = 'assets/placeholder.png';
         if (!logged) {
             const returnTo = encodeURIComponent(currentPathWithQuery());
             window.location.href = 'auth/login.php?return=' + returnTo;
+            return;
+        }
+
+        // kalau disabled (stok habis), jangan lanjut
+        if (btn.disabled) {
             return;
         }
 
@@ -832,7 +878,6 @@ $placeholder = 'assets/placeholder.png';
         });
     });
 
-    // NAV SEARCH expand/contract
     (function(){
         const navSearchWrap = document.getElementById('navSearch');
         const searchInput = navSearchWrap ? navSearchWrap.querySelector('.search-input') : null;
@@ -851,7 +896,6 @@ $placeholder = 'assets/placeholder.png';
         }
     })();
 
-    // PROFILE DROPDOWN
     (function(){
         const profileBtn = document.getElementById('profileBtn');
         const dropdown = document.getElementById('profileDropdown');
@@ -901,7 +945,6 @@ $placeholder = 'assets/placeholder.png';
         });
     })();
 
-    // Enter to open product detail
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') {
             const active = document.activeElement;
@@ -912,7 +955,6 @@ $placeholder = 'assets/placeholder.png';
         }
     });
 
-    // clear search
     (function(){
         const input = document.getElementById("searchInput");
         const clearBtn = document.getElementById("clearSearch");
@@ -925,6 +967,7 @@ $placeholder = 'assets/placeholder.png';
 
         input.addEventListener("input", toggleClear);
 
+        // Saran 2: clear search hanya hapus parameter q, kategori tetap
         clearBtn.addEventListener("click", function(e){
             e.preventDefault();
             input.value = "";
@@ -933,8 +976,12 @@ $placeholder = 'assets/placeholder.png';
             try {
                 const url = new URL(window.location.href);
                 let changed = false;
-                if (url.searchParams.has('q')) { url.searchParams.delete('q'); changed = true; }
-                if (url.searchParams.has('category')) { url.searchParams.delete('category'); changed = true; }
+
+                if (url.searchParams.has('q')) {
+                    url.searchParams.delete('q');
+                    changed = true;
+                }
+
                 if (changed) {
                     const cleaned = url.pathname + (url.search ? url.search : '');
                     window.location.assign(cleaned);
@@ -956,7 +1003,6 @@ $placeholder = 'assets/placeholder.png';
         toggleClear();
     })();
 
-    // Prevent search staying expanded when user clicks category links
     (function(){
         const navSearchWrap = document.getElementById('navSearch');
         const searchInput = navSearchWrap ? navSearchWrap.querySelector('.search-input') : null;
@@ -984,7 +1030,6 @@ $placeholder = 'assets/placeholder.png';
         });
     })();
 
-    // Ensure single product keeps same visual size
     (function(){
         const productContainer = document.querySelector('.product');
 
@@ -1018,7 +1063,6 @@ $placeholder = 'assets/placeholder.png';
         }
     })();
 
-    // ============== HERO SLIDER SCRIPT ==============
     (function () {
         const track = document.getElementById('heroTrack');
         if (!track) return;

@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login - Beauty Shop</title>
-  <link rel="stylesheet" href="login.css">
+  <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
   <div class="container">
@@ -77,7 +77,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div style="text-align:center">
           <h1 id="loginTitle">Masuk</h1>
           <div class="badge-pill">
-            <!-- titik hijau dihapus, hanya teks -->
             <span>Beauty Shop Dashboard</span>
           </div>
         </div>
@@ -162,6 +161,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </p>
     </main>
   </div>
-  <script src="login.js"></script>
+  <script src="js/login.js"></script>
 </body>
 </html>

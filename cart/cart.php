@@ -39,7 +39,7 @@ if ($result === false) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Keranjang</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="cart.css">
+    <link rel="stylesheet" href="css/cart.css">
 </head>
 <body>
 
@@ -71,7 +71,6 @@ if ($result === false) {
         <thead>
         <tr>
             <th>
-                <!-- hanya muncul di layar besar / tablet -->
                 <div style="display:inline-flex;align-items:center;gap:0.375rem;font-weight:500;">
                     <input type="checkbox" id="selectAllDesktop" style="cursor:pointer;">
                     <span style="cursor:default;">Pilih semua</span>
@@ -95,7 +94,7 @@ if ($result === false) {
             <td data-label="Gambar">
                 <?php if (!empty($row['image'])): ?>
                     <a href="../detail_produk.php?id=<?= urlencode((int)$row['product_id']) ?>">
-                        <img class="product-thumb" src="<?= htmlspecialchars($row['image']) ?>" alt="<?= htmlspecialchars($row['name']) ?>">
+                        <img class="product-thumb" src="../assets/<?= htmlspecialchars($row['image']) ?>" alt="<?= htmlspecialchars($row['name']) ?>">
                     </a>
                 <?php else: ?>
                     <span class="sub-text">Tidak ada gambar</span>
@@ -137,7 +136,6 @@ if ($result === false) {
     </table>
 </div>
 
-<!-- PILIH SEMUA VERSI MOBILE (muncul hanya di max-width: 480px) -->
 <div class="select-all-mobile">
     <label for="selectAllMobile">
         <input type="checkbox" id="selectAllMobile">
@@ -176,7 +174,7 @@ if ($result === false) {
 <?php endif; ?>
 </div>
 
-<script src="cart.js"></script>
+<script src="js/cart.js"></script>
 
 </body>
 </html>

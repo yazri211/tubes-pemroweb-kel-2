@@ -18,6 +18,7 @@ if (isset($_POST['tambah_produk'])) {
     $description = htmlspecialchars($_POST['description']);
     $category = isset($_POST['category']) ? trim($_POST['category']) : '';
     if (!array_key_exists($category, $categories)) $category = '';
+    $stock = isset($_POST['stock']) ? max(0, intval($_POST['stock'])) : 0; // stok default 0
     $image = "produk.jpg"; // Default image
     
     if (!empty($_FILES['image']['name'])) {
@@ -32,8 +33,8 @@ if (isset($_POST['tambah_produk'])) {
     }
     
     if ($name && $price > 0) {
-        $stmt = $conn->prepare("INSERT INTO products (name, price, description, image, category) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sisss", $name, $price, $description, $image, $category);
+        $stmt = $conn->prepare("INSERT INTO products (name, price, description, image, category, stock) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sisssi", $name, $price, $description, $image, $category, $stock);
         $stmt->execute();
         $stmt->close();
         header("Location: admin_products.php");
@@ -49,10 +50,11 @@ if (isset($_POST['update_produk'])) {
     $description = htmlspecialchars($_POST['description']);
     $category = isset($_POST['category']) ? trim($_POST['category']) : '';
     if (!array_key_exists($category, $categories)) $category = '';
+    $stock = isset($_POST['stock']) ? max(0, intval($_POST['stock'])) : 0;
     
     if ($name && $price > 0) {
-        $stmt = $conn->prepare("UPDATE products SET name = ?, price = ?, description = ?, category = ? WHERE id = ?");
-        $stmt->bind_param("sissi", $name, $price, $description, $category, $id);
+        $stmt = $conn->prepare("UPDATE products SET name = ?, price = ?, description = ?, category = ?, stock = ? WHERE id = ?");
+        $stmt->bind_param("sissii", $name, $price, $description, $category, $stock, $id);
         $stmt->execute();
         $stmt->close();
         header("Location: admin_products.php");
@@ -79,7 +81,7 @@ if (isset($_POST['hapus_produk'])) {
 }
 
 // LOAD PRODUK
-$products = $conn->query("SELECT id, name, price, description, image, category FROM products ORDER BY id DESC");
+$products = $conn->query("SELECT id, name, price, description, image, category, stock FROM products ORDER BY id DESC");
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -119,6 +121,7 @@ $products = $conn->query("SELECT id, name, price, description, image, category F
                         <option value="<?php echo htmlspecialchars($key); ?>"><?php echo htmlspecialchars($label); ?></option>
                     <?php endforeach; ?>
                 </select>
+                <input type="number" name="stock" placeholder="Stok" min="0" value="0" required>
                 <input type="file" name="image" accept="image/*">
                 <button class="btn-primary" name="tambah_produk">
                     <span>Tambah Produk</span>
@@ -140,6 +143,7 @@ $products = $conn->query("SELECT id, name, price, description, image, category F
                         <th>Gambar</th>
                         <th>Nama</th>
                         <th>Harga</th>
+                        <th>Stok</th>
                         <th>Deskripsi</th>
                         <th>Kategori</th>
                         <th>Aksi</th>
@@ -158,6 +162,9 @@ $products = $conn->query("SELECT id, name, price, description, image, category F
                         <span class="price-badge">
                             Rp <?= number_format($p['price'], 0, ',', '.') ?>
                         </span>
+                    </td>
+                    <td data-label="Stok">
+                        <span class="stock-badge"><?= intval($p['stock']) ?></span>
                     </td>
                     <td class="description-cell" data-label="Deskripsi">
                         <?= htmlspecialchars($p['description']) ?>
@@ -182,6 +189,7 @@ $products = $conn->query("SELECT id, name, price, description, image, category F
                                     <div class="form-row">
                                         <input type="text" name="name" value="<?= htmlspecialchars($p['name']) ?>" required>
                                         <input type="number" name="price" value="<?= $p['price'] ?>" required>
+                                        <input type="number" name="stock" value="<?= intval($p['stock']) ?>" min="0" required>
                                         <textarea name="description"><?= htmlspecialchars($p['description']) ?></textarea>
                                         <select name="category">
                                             <option value="">-- Pilih Kategori --</option>

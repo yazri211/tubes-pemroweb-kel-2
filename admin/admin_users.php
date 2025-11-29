@@ -46,7 +46,7 @@ $users = $conn->query("SELECT id, username, email, role FROM users ORDER BY id A
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kelola User</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="admin_users.css">
+    <link rel="stylesheet" href="css/admin_users.css">
 </head>
 <body>
 <div class="container">
@@ -202,6 +202,6 @@ $users = $conn->query("SELECT id, username, email, role FROM users ORDER BY id A
     </div>
 
 </div>
-    <script src="admin_users.js"></script>
+    <script src="js/admin_users.js"></script>
 </body>
 </html>

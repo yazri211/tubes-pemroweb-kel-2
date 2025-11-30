@@ -39,8 +39,8 @@ $tx = mysqli_query($conn, "
             <p class="header-subtitle">Pantau dan kelola seluruh transaksi user dengan cepat dan rapi.</p>
         </div>
         <div class="nav">
-            <a href="admin_users.php">Kelola User</a>
-            <a href="admin_products.php">Kelola Produk</a>
+            <a href="admin_users.php">👥 Kelola User</a>
+            <a href="admin_products.php">📦 Kelola Produk</a>
             <a href="../auth/logout.php">Logout</a>
         </div>
     </div>

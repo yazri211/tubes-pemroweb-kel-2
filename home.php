@@ -181,7 +181,7 @@ $placeholder = 'assets/placeholder.png';
                 <div class="hero-slide">
                     <img class="hero-img" src="assets/iklan2.jpg" alt="Promo skincare">
                     <div class="hero-overlay">
-                        <h2>Perawatan Kulit Harian</h2>
+                        <h2>tes tes</h2>
                         <p>Paket skincare lengkap untuk semua jenis kulit, siap kirim hari ini.</p>
                     </div>
                 </div>

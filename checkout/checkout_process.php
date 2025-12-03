@@ -9,20 +9,76 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = (int) $_SESSION['user_id'];
 
-$cart_ids_arr = [];
-if (isset($_POST['selected']) && is_array($_POST['selected'])) {
-    $cart_ids_arr = array_map('intval', $_POST['selected']);
-} elseif (isset($_POST['cart_ids'])) {
-    if (is_array($_POST['cart_ids'])) {
-        $cart_ids_arr = array_map('intval', $_POST['cart_ids']);
-    } else {
-        $cart_ids_arr = array_map('intval', array_filter(array_map('trim', explode(',', $_POST['cart_ids']))));
-    }
-}
+// MODE 1: Single product (dari "Beli sekarang")
+$mode = isset($_POST['mode']) ? $_POST['mode'] : '';
+$single_product_mode = ($mode === 'single');
+$items = [];
 
-if (empty($cart_ids_arr)) {
-    echo "<script>alert('Tidak ada produk dipilih'); window.location='../cart/cart.php';</script>";
-    exit();
+if ($single_product_mode) {
+    // Handle single product checkout
+    $product_id = (int)($_POST['product_id'] ?? 0);
+    $quantity = (int)($_POST['quantity'] ?? 1);
+    
+    if ($product_id <= 0 || $quantity <= 0) {
+        echo "<script>alert('Data produk tidak valid'); window.location='../home.php';</script>";
+        exit();
+    }
+    
+    // Fetch product details
+    $sql = "SELECT id, name, price FROM products WHERE id = $product_id LIMIT 1";
+    $query = mysqli_query($conn, $sql);
+    if (!$query || mysqli_num_rows($query) === 0) {
+        echo "<script>alert('Produk tidak ditemukan'); window.location='../home.php';</script>";
+        exit();
+    }
+    
+    $row = mysqli_fetch_assoc($query);
+    $items[] = [
+        'product_id' => (int)$row['id'],
+        'name' => $row['name'],
+        'price' => (float)$row['price'],
+        'quantity' => $quantity
+    ];
+} else {
+    // MODE 2: Cart mode (dari keranjang)
+    $cart_ids_arr = [];
+    if (isset($_POST['selected']) && is_array($_POST['selected'])) {
+        $cart_ids_arr = array_map('intval', $_POST['selected']);
+    } elseif (isset($_POST['cart_ids'])) {
+        if (is_array($_POST['cart_ids'])) {
+            $cart_ids_arr = array_map('intval', $_POST['cart_ids']);
+        } else {
+            $cart_ids_arr = array_map('intval', array_filter(array_map('trim', explode(',', $_POST['cart_ids']))));
+        }
+    }
+
+    if (empty($cart_ids_arr)) {
+        echo "<script>alert('Tidak ada produk dipilih'); window.location='../cart/cart.php';</script>";
+        exit();
+    }
+
+    $ids_str = implode(',', array_map('intval', $cart_ids_arr));
+
+    $sql = "SELECT c.id AS cart_id, c.quantity, c.product_id, p.name, p.price
+            FROM `cart` c
+            JOIN `products` p ON c.product_id = p.id
+            WHERE c.id IN ($ids_str) AND c.user_id = $user_id";
+
+    $query = mysqli_query($conn, $sql);
+    if (!$query || mysqli_num_rows($query) == 0) {
+        echo "<script>alert('Produk di keranjang tidak ditemukan atau bukan milik Anda'); window.location='../cart/cart.php';</script>";
+        exit();
+    }
+
+    while ($row = mysqli_fetch_assoc($query)) {
+        $items[] = [
+            'cart_id' => (int)$row['cart_id'],
+            'product_id' => (int)$row['product_id'],
+            'name' => $row['name'],
+            'price' => (float)$row['price'],
+            'quantity' => (int)$row['quantity']
+        ];
+    }
 }
 
 $metode = isset($_POST['metode_pembayaran']) ? mysqli_real_escape_string($conn, $_POST['metode_pembayaran']) : '';
@@ -40,26 +96,10 @@ if (isset($_POST['pengiriman']) && strpos($_POST['pengiriman'], '|') !== false) 
 
 $admin_fee = 5000;
 
-$ids_str = implode(',', array_map('intval', $cart_ids_arr));
-
-$sql = "SELECT c.id AS cart_id, c.quantity, c.product_id, p.name, p.price
-        FROM `cart` c
-        JOIN `products` p ON c.product_id = p.id
-        WHERE c.id IN ($ids_str) AND c.user_id = $user_id";
-
-$query = mysqli_query($conn, $sql);
-if (! $query || mysqli_num_rows($query) == 0) {
-    echo "<script>alert('Produk di keranjang tidak ditemukan atau bukan milik Anda'); window.location='../cart/cart.php';</script>";
-    exit();
-}
-
-// Hitung total
+// Calculate total from items array
 $total = 0;
-$items = [];
-while ($row = mysqli_fetch_assoc($query)) {
-    $sub = $row['price'] * $row['quantity'];
-    $total += $sub;
-    $items[] = $row;
+foreach ($items as $item) {
+    $total += $item['price'] * $item['quantity'];
 }
 
 $grand_total = $total + $ongkir + $admin_fee;
@@ -98,9 +138,25 @@ foreach ($items as $item) {
     }
 }
 
-// Hapus dari cart (hanya milik user)
-$del_sql = "DELETE FROM `cart` WHERE id IN ($ids_str) AND user_id = $user_id";
-mysqli_query($conn, $del_sql);
+// Hapus dari cart hanya jika mode cart (bukan single product)
+if (!$single_product_mode) {
+    $cart_ids_arr = [];
+    if (isset($_POST['selected']) && is_array($_POST['selected'])) {
+        $cart_ids_arr = array_map('intval', $_POST['selected']);
+    } elseif (isset($_POST['cart_ids'])) {
+        if (is_array($_POST['cart_ids'])) {
+            $cart_ids_arr = array_map('intval', $_POST['cart_ids']);
+        } else {
+            $cart_ids_arr = array_map('intval', array_filter(array_map('trim', explode(',', $_POST['cart_ids']))));
+        }
+    }
+    
+    if (!empty($cart_ids_arr)) {
+        $ids_str = implode(',', array_map('intval', $cart_ids_arr));
+        $del_sql = "DELETE FROM `cart` WHERE id IN ($ids_str) AND user_id = $user_id";
+        mysqli_query($conn, $del_sql);
+    }
+}
 
 echo "<script>alert('Transaksi berhasil!'); window.location='../order/order_history.php';</script>";
 exit();

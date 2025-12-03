@@ -53,25 +53,18 @@ $users = $conn->query("SELECT id, username, email, role FROM users ORDER BY id A
 
     <div class="header">
         <div class="header-left">
-            <h1>👥 Kelola User</h1>
-            <small>Atur akun, peran, dan akses pengguna aplikasi Anda.</small>
+            <h1><span>👥</span> Kelola User</h1>
+            <p class="header-subtitle">Atur akun, peran, dan akses pengguna aplikasi Anda.</p>
         </div>
         <div class="nav">
             <a href="admin_products.php">
-                <span class="icon">🛒</span>
-                <span>Kelola Produk</span>
+                <span>📦 Kelola Produk</span>
             </a>
             <a href="admin_transactions.php">
-                <span class="icon">💳</span>
-                <span>Kelola Transaksi</span>
-            </a>
-            <a href="admin_users.php" class="active">
-                <span class="icon">👥</span>
-                <span>User</span>
+                <span>💳 Kelola Transaksi</span>
             </a>
             <a href="../auth/logout.php" class="logout">
-                <span class="icon">🚪</span>
-                <span>Logout</span>
+                <span>🚪 Logout</span>
             </a>
         </div>
     </div>

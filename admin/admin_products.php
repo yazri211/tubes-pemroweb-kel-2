@@ -95,11 +95,20 @@ $products = $conn->query("SELECT id, name, price, description, image, category, 
 <body>
 <div class="container">
     <div class="header">
-        <h1><span>📦</span>Kelola Produk</h1>
+        <div class="header-left">
+            <h1><span>📦</span> Kelola Produk</h1>
+            <p class="header-subtitle">Kelola inventori produk, harga, stok, dan kategori dengan mudah.</p>
+        </div>
         <div class="nav">
-            <a href="admin_users.php">👥 Kelola User</a>
-            <a href="admin_transactions.php">💳 Kelola Transaksi</a>
-            <a href="../auth/logout.php">🚪 Logout</a>
+            <a href="admin_users.php">
+                <span>👥 Kelola User</span>
+            </a>
+            <a href="admin_transactions.php">
+                <span>💳 Kelola Transaksi</span>
+            </a>
+            <a href="../auth/logout.php" class="logout">
+                <span>🚪 Logout</span>
+            </a>
         </div>
     </div>
 

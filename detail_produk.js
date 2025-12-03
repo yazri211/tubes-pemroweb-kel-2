@@ -80,9 +80,13 @@ updateCartCount();
             e.target.disabled = true;
 
             fetch("cart/cart_add.php?id=" + encodeURIComponent(productId) + "&qty=" + encodeURIComponent(qty))
-                .then(response => response.text())
-                .then(data => {
-                    alert("Produk berhasil ditambahkan ke keranjang!");
+                .then(response => response.json())
+                .then(json => {
+                    if (json && json.success) {
+                        alert("Berhasil menambahkan " + json.added + " item ke keranjang!");
+                    } else {
+                        alert("Gagal: " + (json.message || "Unknown error"));
+                    }
                     updateCartCount();
                 })
                 .catch(err => {

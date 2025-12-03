@@ -29,9 +29,9 @@ body {
     margin-bottom: 28px;
     padding: 18px 24px;
     border-radius: 18px;
-    background: #ff6bb5; /* SOLID */
+    background: #ec4899;
     color: white;
-    box-shadow: 0 12px 30px rgba(255, 107, 181, 0.4);
+    box-shadow: 0 12px 30px rgba(236, 72, 153, 0.45);
     position: relative;
     overflow: hidden;
 }
@@ -56,11 +56,17 @@ body {
 .header h1 {
     font-size: 26px;
     font-weight: 700;
-    text-shadow: 0 2px 4px rgba(204, 38, 120, 0.5);
     margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
-.header small {
+.header h1 span {
+    font-size: 26px;
+}
+
+.header-subtitle {
     font-size: 13px;
     opacity: 0.9;
 }
@@ -81,27 +87,17 @@ body {
     background: rgba(255, 255, 255, 0.16);
     transition: all 0.25s ease;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 13px;
     display: inline-flex;
     align-items: center;
     gap: 6px;
     border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
-.nav a span.icon {
-    font-size: 15px;
-}
-
 .nav a:hover {
     transform: translateY(-1px);
     background: rgba(255, 255, 255, 0.24);
-    box-shadow: 0 8px 16px rgba(146, 26, 89, 0.2);
-}
-
-.nav a.active {
-    background: #ffffff;
-    color: #ff4d94;
-    box-shadow: 0 10px 20px rgba(145, 25, 85, 0.35);
+    box-shadow: 0 8px 16px rgba(236, 72, 153, 0.3);
 }
 
 .nav a.logout {

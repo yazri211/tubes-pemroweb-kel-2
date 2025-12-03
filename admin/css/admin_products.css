@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Poppins', Arial, sans-serif;
-    background: #fdf2f8;
+    background: #ffffff;
     min-height: 100vh;
     padding: 20px;
     color: #333;
@@ -18,8 +18,8 @@ body {
     background: #ffffff;
     padding: 32px 32px 40px;
     border-radius: 24px;
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
-    border: 1px solid #fed7e2;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.08);
+    border: 1px solid #ffd1ec;
 }
 
 .header {
@@ -27,53 +27,82 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 28px;
-    padding: 18px 22px;
+    padding: 18px 24px;
     border-radius: 18px;
     background: #ec4899;
     color: white;
-    box-shadow: 0 12px 28px rgba(236, 72, 153, 0.45);
+    box-shadow: 0 12px 30px rgba(236, 72, 153, 0.45);
+    position: relative;
+    overflow: hidden;
+}
+
+.header::before {
+    content: '';
+    position: absolute;
+    width: 240px;
+    height: 240px;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 50%;
+    top: -120px;
+    right: -80px;
+    filter: blur(2px);
+}
+
+.header-left {
+    position: relative;
+    z-index: 1;
 }
 
 .header h1 {
     font-size: 26px;
     font-weight: 700;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .header h1 span {
-    margin-right: 6px;
+    font-size: 26px;
+}
+
+.header-subtitle {
+    font-size: 13px;
+    opacity: 0.9;
 }
 
 .nav {
     display: flex;
     gap: 10px;
+    position: relative;
+    z-index: 1;
     flex-wrap: wrap;
 }
 
 .nav a {
-    color: #ec4899;
+    color: white;
     text-decoration: none;
-    padding: 9px 16px;
+    padding: 10px 18px;
     border-radius: 999px;
-    background: #fdf2f8;
-    border: 1px solid #f9a8d4;
+    background: rgba(255, 255, 255, 0.16);
+    transition: all 0.25s ease;
     font-weight: 500;
     font-size: 13px;
-    transition: all 0.22s ease;
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
 .nav a:hover {
-    background: #ffffff;
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(190, 24, 93, 0.15);
+    background: rgba(255, 255, 255, 0.24);
+    box-shadow: 0 8px 16px rgba(236, 72, 153, 0.3);
 }
 
-.nav a:last-child {
-    background: #fecaca;
-    border-color: #f97373;
-    color: #b91c1c;
+.nav a.logout {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 .section-title {

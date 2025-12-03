@@ -84,10 +84,14 @@ document.addEventListener('click', function (e) {
         if (!response.ok) {
             throw new Error('Server error');
         }
-        return response.text();
+        return response.json();
     })
-    .then(() => {
-        showToast('Produk ditambahkan ke keranjang');
+    .then(json => {
+        if (json && json.success) {
+            showToast('Berhasil menambahkan ' + json.added + ' item ke keranjang');
+        } else {
+            showToast('Gagal: ' + (json.message || 'Terjadi kesalahan'));
+        }
         updateCartCount();
     })
     .catch(err => {

@@ -36,10 +36,7 @@ if (isset($_GET['product_id'])) {
     $pid = intval($_GET['product_id']);
     if ($pid <= 0) no_product_page("ID produk tidak valid.");
 
-    $stmt = mysqli_prepare($conn, "SELECT id AS product_id, name, price, stock FROM products WHERE id = ? LIMIT 1");
-    mysqli_stmt_bind_param($stmt, "i", $pid);
-    mysqli_stmt_execute($stmt);
-    $res = mysqli_stmt_get_result($stmt);
+    $res = mysqli_query($conn, "SELECT id AS product_id, name, price, stock FROM products WHERE id = $pid LIMIT 1");
     if (!$res || mysqli_num_rows($res) === 0) {
         no_product_page("Produk tidak ditemukan.");
     }
@@ -138,7 +135,8 @@ if (!$single_product) {
         </div>
     </header>
 
-    <form action="checkout_process.php" method="POST" novalidate>
+    <!-- NOTE: removed 'novalidate' so HTML5 required validation aktif -->
+    <form action="checkout_process.php" method="POST">
         <?php if ($single_product): ?>
             <input type="hidden" name="mode" value="single">
             <input type="hidden" name="product_id" value="<?= htmlspecialchars($single_product['product_id']) ?>">

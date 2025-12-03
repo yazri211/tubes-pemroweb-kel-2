@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div style="text-align:center">
           <h1 id="loginTitle">Masuk</h1>
           <div class="badge-pill">
-            <span>Beauty Shop Dashboard</span>
+            <span>Beauty Shop Account</span>
           </div>
         </div>
       </div>

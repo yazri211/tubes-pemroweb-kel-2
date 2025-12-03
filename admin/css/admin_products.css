@@ -4,9 +4,10 @@
     box-sizing: border-box;
 }
 
+/* ==== GLOBAL ==== */
 body {
     font-family: 'Poppins', Arial, sans-serif;
-    background: #ffffff;
+    background: #fdf2f8;              /* soft pink, sama seperti style atas */
     min-height: 100vh;
     padding: 20px;
     color: #333;
@@ -18,10 +19,11 @@ body {
     background: #ffffff;
     padding: 32px 32px 40px;
     border-radius: 24px;
-    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.08);
-    border: 1px solid #ffd1ec;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+    border: 1px solid #fed7e2;         /* border pink lembut */
 }
 
+/* ==== HEADER ==== */
 .header {
     display: flex;
     justify-content: space-between;
@@ -29,24 +31,13 @@ body {
     margin-bottom: 28px;
     padding: 18px 24px;
     border-radius: 18px;
-    background: #ec4899;
+    background: #ec4899;               /* pink utama */
     color: white;
     box-shadow: 0 12px 30px rgba(236, 72, 153, 0.45);
     position: relative;
     overflow: hidden;
 }
 
-.header::before {
-    content: '';
-    position: absolute;
-    width: 240px;
-    height: 240px;
-    background: rgba(255, 255, 255, 0.18);
-    border-radius: 50%;
-    top: -120px;
-    right: -80px;
-    filter: blur(2px);
-}
 
 .header-left {
     position: relative;
@@ -71,6 +62,7 @@ body {
     opacity: 0.9;
 }
 
+/* ==== NAVIGATION ==== */
 .nav {
     display: flex;
     gap: 10px;
@@ -80,31 +72,33 @@ body {
 }
 
 .nav a {
-    color: white;
+    color: #ec4899;
     text-decoration: none;
-    padding: 10px 18px;
+    padding: 9px 16px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.16);
-    transition: all 0.25s ease;
+    background: #fdf2f8;
+    border: 1px solid #f9a8d4;
     font-weight: 500;
     font-size: 13px;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.35);
+    transition: all 0.22s ease;
 }
 
 .nav a:hover {
+    background: #ffffff;
     transform: translateY(-1px);
-    background: rgba(255, 255, 255, 0.24);
-    box-shadow: 0 8px 16px rgba(236, 72, 153, 0.3);
+    box-shadow: 0 6px 16px rgba(190, 24, 93, 0.15);
 }
 
 .nav a.logout {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.4);
+    background: #fecaca;
+    border-color: #f97373;
+    color: #b91c1c;
 }
 
+/* ==== SECTION TITLE ==== */
 .section-title {
     font-size: 20px;
     margin: 26px 0 16px;
@@ -119,6 +113,7 @@ body {
     font-size: 22px;
 }
 
+/* ==== FORM UTAMA TAMBAH PRODUK ==== */
 .form-group {
     display: grid;
     gap: 18px;
@@ -142,16 +137,20 @@ body {
     gap: 14px;
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
     padding: 11px 12px;
     border: 1px solid #fecdd3;
     border-radius: 10px;
     font-size: 14px;
-    background: #ffffff;
+    background: #fffafd;
     transition: 0.2s ease;
 }
 
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
     outline: none;
     border-color: #ec4899;
     box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.18);
@@ -163,6 +162,7 @@ textarea {
     min-height: 90px;
 }
 
+/* ==== BUTTONS ==== */
 button {
     padding: 11px 20px;
     border: none;
@@ -172,6 +172,10 @@ button {
     font-size: 14px;
     transition: all 0.22s ease;
     box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .btn-primary {
@@ -199,12 +203,14 @@ button {
     color: white;
 }
 
+/* ==== TABEL PRODUK ==== */
 .table-wrapper {
     width: 100%;
     margin-top: 16px;
     border-radius: 18px;
     overflow: hidden;
     box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+    background: #ffffff;
 }
 
 .table-scroll {
@@ -228,6 +234,8 @@ th {
     color: #fdf2f8;
     padding: 14px 16px;
     font-size: 13px;
+    text-align: left;
+    white-space: nowrap;
 }
 
 td {
@@ -238,6 +246,11 @@ td {
 
 tr.product-row:nth-child(even) {
     background: #fff9fd;
+}
+
+tr.product-row:hover {
+    background: #fdf2f8;
+    transition: background 0.15s ease;
 }
 
 .product-img {
@@ -253,29 +266,35 @@ tr.product-row:nth-child(even) {
     word-wrap: break-word;
 }
 
+/* Harga & kategori pakai gaya badge/pill */
 .price-badge {
     padding: 5px 10px;
     border-radius: 999px;
-    color: #92400e;
+    background: #fff7fb;
+    color: #b10063;
     font-size: 12px;
     font-weight: 600;
+    border: 1px solid #ffc7e5;
 }
 
 .category-pill {
     padding: 5px 10px;
     border-radius: 999px;
-    background: #e0f2fe;
-    color: #1d4ed8;
+    background: #e6f4ff;
+    color: #005fa3;
     font-size: 12px;
     font-weight: 500;
 }
 
+/* ==== ACTION CELL ==== */
 .action-cell {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+    align-items: center;
 }
 
+/* ==== EDIT FORM DI DALAM TABEL ==== */
 .edit-form {
     max-height: 0;
     overflow: hidden;
@@ -284,8 +303,8 @@ tr.product-row:nth-child(even) {
 }
 
 .edit-form.show {
-    max-height: 420px;          
-    overflow: auto;             
+    max-height: 420px;
+    overflow: auto;
     opacity: 1;
     margin-top: 10px;
     padding: 12px;
@@ -312,4 +331,3 @@ tr.product-row:nth-child(even) {
     z-index: 2;
     position: relative;
 }
-

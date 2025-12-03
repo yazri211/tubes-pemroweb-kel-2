@@ -35,19 +35,13 @@ $tx = mysqli_query($conn, "
 <div class="container">
     <div class="header">
         <div class="header-left">
-            <h1><span>💳</span> Kelola Transaksi</h1>
+            <h1><span>💰</span> Kelola Transaksi</h1>
             <p class="header-subtitle">Pantau dan kelola seluruh transaksi user dengan cepat dan rapi.</p>
         </div>
         <div class="nav">
-            <a href="admin_users.php">
-                <span>👥 Kelola User</span>
-            </a>
-            <a href="admin_products.php">
-                <span>📦 Kelola Produk</span>
-            </a>
-            <a href="../auth/logout.php" class="logout">
-                <span>🚪 Logout</span>
-            </a>
+            <a href="admin_users.php">👥 Kelola User</a>
+            <a href="admin_products.php">📦 Kelola Produk</a>
+            <a href="../auth/logout.php">Logout</a>
         </div>
     </div>
 

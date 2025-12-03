@@ -188,10 +188,6 @@ $placeholder = 'assets/placeholder.png';
 
                 <div class="hero-slide">
                     <img class="hero-img" src="assets/iklan3.jpg" alt="Promo fragrance">
-                    <div class="hero-overlay">
-                        <h2>Wangi Tahan Lama</h2>
-                        <p>Pilihan fragrance eksklusif untuk menambah rasa percaya diri kamu.</p>
-                    </div>
                 </div>
             </div>
 

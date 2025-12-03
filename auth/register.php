@@ -1,4 +1,4 @@
-<?php
+\<?php
 
 include '../conn.php';
 
@@ -34,7 +34,7 @@ if (isset($_POST['register'])) {
         if (mysqli_num_rows($result) > 0) {
             $msg = "Email sudah digunakan!";
         } else {
-
+            // Hash password & insert tanpa prepared statement
             $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
             $insert = "INSERT INTO users (username, email, password) 
@@ -54,10 +54,10 @@ if (isset($_POST['register'])) {
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Registrasi - Beauty Shop</title>
-    <link rel="stylesheet" href="css/register.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registrasi - Beauty Shop</title>
+  <link rel="stylesheet" href="css/register.css">
 </head>
 <body>
   <div class="container">
@@ -69,7 +69,7 @@ if (isset($_POST['register'])) {
         <div style="text-align:center">
           <h1 id="regTitle">Daftar</h1>
           <div class="badge-pill">
-            <span>Beauty Shop Account</span>
+            <span>Beauty Shop Dashboard</span>
           </div>
         </div>
       </div>
@@ -100,7 +100,7 @@ if (isset($_POST['register'])) {
                      required
                      minlength="3"
                      pattern="[A-Za-z0-9_]{3,}"
-                     title="Nama Pengguna minimal 3 karakter (huruf, angka, underscore)"
+                     title="Username minimal 3 karakter (huruf, angka, underscore)"
                      value="<?php echo htmlspecialchars($old['username']); ?>">
             </div>
           </li>
@@ -136,21 +136,18 @@ if (isset($_POST['register'])) {
                       aria-label="Tampilkan kata sandi"
                       aria-pressed="false">
                 <!-- mata terbuka (disembunyikan awal) -->
-                <svg class="icon-eye" viewBox="0 0 24 24" fill="none" style="display:none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <svg class="icon-eye" viewBox="0 0 24 24" fill="none"
+                     style="display:none"
+                     xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <path
-                    d="M2 12C4.5 8 7.5 6 12 6C16.5 6 19.5 8 22 12C19.5 16 16.5 18 12 18C7.5 18 4.5 16 2 12Z"
+                    d="M12 5C7 5 2.73 8.11 1 12c1.73 3.89 6 7 11 7s9.27-3.11 11-7c-1.73-3.89-6-7-11-7z"
                     stroke="#ff6aa6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <circle cx="12" cy="12" r="3.2"
-                          stroke="#ff6aa6" stroke-width="2"/>
+                  <circle cx="12" cy="12" r="3" stroke="#ff6aa6" stroke-width="2"/>
                 </svg>
-                <!-- mata tertutup (default) -->
-                <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <path
-                    d="M2 12C4.5 8 7.5 6 12 6C16.5 6 19.5 8 22 12C19.5 16 16.5 18 12 18C7.5 18 4.5 16 2 12Z"
-                    stroke="#ff6aa6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <circle cx="12" cy="12" r="3.2"
-                          stroke="#ff6aa6" stroke-width="2"/>
-                  <path d="M4 4L20 20"
+                <!-- mata tertutup (default tampil) -->
+                <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none"
+                     xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 19c-5 0-9.27-3.11-11-7a19.26 19.26 0 0 1 5.06-6.36m3.07-1.3A9.94 9.94 0 0 1 12 5c5 0 9.27 3.11 11 7a19.61 19.61 0 0 1-4.3 5.47M1 1l22 22"
                         stroke="#ff6aa6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </button>
@@ -174,21 +171,18 @@ if (isset($_POST['register'])) {
                       aria-label="Tampilkan konfirmasi kata sandi"
                       aria-pressed="false">
                 <!-- mata terbuka (disembunyikan awal) -->
-                <svg class="icon-eye" viewBox="0 0 24 24" fill="none" style="display:none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <svg class="icon-eye" viewBox="0 0 24 24" fill="none"
+                     style="display:none"
+                     xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <path
-                    d="M2 12C4.5 8 7.5 6 12 6C16.5 6 19.5 8 22 12C19.5 16 16.5 18 12 18C7.5 18 4.5 16 2 12Z"
+                    d="M12 5C7 5 2.73 8.11 1 12c1.73 3.89 6 7 11 7s9.27-3.11 11-7c-1.73-3.89-6-7-11-7z"
                     stroke="#ff6aa6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <circle cx="12" cy="12" r="3.2"
-                          stroke="#ff6aa6" stroke-width="2"/>
+                  <circle cx="12" cy="12" r="3" stroke="#ff6aa6" stroke-width="2"/>
                 </svg>
-                <!-- mata tertutup (default) -->
-                <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <path
-                    d="M2 12C4.5 8 7.5 6 12 6C16.5 6 19.5 8 22 12C19.5 16 16.5 18 12 18C7.5 18 4.5 16 2 12Z"
-                    stroke="#ff6aa6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <circle cx="12" cy="12" r="3.2"
-                          stroke="#ff6aa6" stroke-width="2"/>
-                  <path d="M4 4L20 20"
+                <!-- mata tertutup (default tampil) -->
+                <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none"
+                     xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 19c-5 0-9.27-3.11-11-7a19.26 19.26 0 0 1 5.06-6.36m3.07-1.3A9.94 9.94 0 0 1 12 5c5 0 9.27 3.11 11 7a19.61 19.61 0 0 1-4.3 5.47M1 1l22 22"
                         stroke="#ff6aa6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </button>
@@ -196,16 +190,17 @@ if (isset($_POST['register'])) {
           </li>
 
           <li>
-            <button type="submit" name="register" id="submitBtn">
+            <button type="submit" name="register">
               <span class="btn-text">Daftar</span>
             </button>
           </li>
-
-          <li>
-            <p class="help-text">Sudah punya akun? <a href="login.php">Masuk sekarang</a></p>
-          </li>
         </ul>
       </form>
+
+      <p class="help-text">
+        Sudah punya akun?
+        <a href="login.php">Masuk sekarang</a>
+      </p>
     </main>
   </div>
 

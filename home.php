@@ -2,9 +2,7 @@
 session_start();
 include 'conn.php';
 
-//
-// ------------------ DETEKSI LOGIN UNTUK FRONT-END ------------------
-//
+
 $isLoggedIn = false;
 if (!empty($_SESSION['user_id'])) {
     $isLoggedIn = true;
@@ -12,7 +10,6 @@ if (!empty($_SESSION['user_id'])) {
     $isLoggedIn = true;
 }
 
-// ==================================================================
 
 // ambil parameter search & category
 $search   = isset($_GET['q']) ? trim($_GET['q']) : '';
@@ -175,19 +172,15 @@ $placeholder = 'assets/placeholder.png';
         <section class="hero" aria-label="Promo utama">
             <div class="hero-track" id="heroTrack">
                 <div class="hero-slide">
-                    <img class="hero-img" src="assets/iklan.jpg" alt="Promo spesial Beauty Shop">
+                    <img class="hero-img" src="assets/iklan 1.png" alt="Promo spesial Beauty Shop">
                 </div>
 
                 <div class="hero-slide">
-                    <img class="hero-img" src="assets/iklan2.jpg" alt="Promo skincare">
-                    <div class="hero-overlay">
-                        <h2>tes tes</h2>
-                        <p>Paket skincare lengkap untuk semua jenis kulit, siap kirim hari ini.</p>
-                    </div>
+                    <img class="hero-img" src="assets/iklan 2.png" alt="Promo skincare">
                 </div>
 
                 <div class="hero-slide">
-                    <img class="hero-img" src="assets/iklan3.jpg" alt="Promo fragrance">
+                    <img class="hero-img" src="assets/iklan 3.png" alt="Promo fragrance">
                 </div>
             </div>
 

@@ -24,8 +24,9 @@ $orders_count = $orders ? $orders->num_rows : 0;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Riwayat Transaksi</title>
+    <link rel="icon" type="image/png" href="../assets/logo no wm.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="order_history.css">
+    <link rel="stylesheet" href="order_history.css?v=<?= time() ?>">
 </head>
 
 <body>

@@ -11,16 +11,13 @@ if (!empty($_SESSION['user_id'])) {
 }
 
 
-// ambil parameter search & category
 $search   = isset($_GET['q']) ? trim($_GET['q']) : '';
 $category = isset($_GET['category']) ? trim($_GET['category']) : '';
 
-// prepare safe values
 $searchTerm   = '%' . $search . '%';
 $searchSafe   = mysqli_real_escape_string($conn, $searchTerm);
 $categorySafe = mysqli_real_escape_string($conn, $category);
 
-// build query dengan filter opsional
 $sql = "SELECT * FROM products WHERE 1";
 
 if (!empty($search)) {
@@ -39,7 +36,6 @@ if (!$result) {
     die("Query gagal: " . mysqli_error($conn));
 }
 
-// categories list
 $categories = [
     'makeup'     => 'Makeup',
     'skincare'   => 'Skincare',
@@ -49,7 +45,6 @@ $categories = [
     'fragrance'  => 'Fragrance'
 ];
 
-// placeholder image
 $placeholder = 'assets/placeholder.png';
 ?>
 <!DOCTYPE html>
@@ -58,7 +53,8 @@ $placeholder = 'assets/placeholder.png';
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
     <title>Daftar Produk - Beauty Shop</title>
-    <link rel="stylesheet" href="home.css">
+    <link rel="icon" type="image/png" href="assets/logo no wm.png">
+    <link rel="stylesheet" href="home.css?v=<?= time() ?>">
 </head>
 <body>
     <!-- NAVBAR -->
@@ -167,7 +163,7 @@ $placeholder = 'assets/placeholder.png';
             <?php endforeach; ?>
         </ul>
 
-        <!-- HERO SLIDER: hanya di SEMUA (tanpa category) & tanpa search -->
+        <!-- HERO SLIDER -->
         <?php if ($search === '' && $category === ''): ?>
         <section class="hero" aria-label="Promo utama">
             <div class="hero-track" id="heroTrack">
@@ -237,7 +233,7 @@ $placeholder = 'assets/placeholder.png';
                             </div>
 
                             <div class="card-actions">
-                                <!-- Saran 4: tombol beli sekarang mengikuti stok -->
+
                                 <button
                                     class="btn btn-primary"
                                     <?php echo $habis ? 'disabled title="Stok habis"' : ''; ?>
@@ -248,7 +244,6 @@ $placeholder = 'assets/placeholder.png';
                                     <?php echo $habis ? 'Stok habis' : 'Beli sekarang'; ?>
                                 </button>
 
-                                <!-- Saran 4: add-to-cart disable jika stok habis -->
                                 <button class="btn btn-ghost icon-btn add-to-cart"
                                         data-id="<?php echo (int)$card['id']; ?>"
                                         data-logged="<?php echo $isLoggedIn ? '1' : '0'; ?>"

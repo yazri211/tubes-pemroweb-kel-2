@@ -3,7 +3,6 @@
 include '../conn.php';
 session_start();
 
-// ambil user_id dengan pola yang sama seperti di home
 $user_id = null;
 
 if (!empty($_SESSION['user_id'])) {
@@ -12,13 +11,11 @@ if (!empty($_SESSION['user_id'])) {
     $user_id = (int) $_SESSION['user']['id'];
 }
 
-// kalau tetap tidak ada, paksa login
 if (!$user_id) {
     header("Location: ../auth/login.php");
     exit();
 }
 
-// SEKARANG query pakai $user_id
 $query = "
     SELECT cart.id AS cart_id, cart.quantity,
            products.id AS product_id, products.name, products.price, products.image
@@ -38,8 +35,9 @@ if ($result === false) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Keranjang</title>
+    <link rel="icon" type="image/png" href="../assets/logo no wm.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/cart.css">
+    <link rel="stylesheet" href="css/cart.css?v=<?= time() ?>">
 </head>
 <body>
 

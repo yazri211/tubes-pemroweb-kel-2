@@ -3,7 +3,6 @@ header('Content-Type: application/json; charset=utf-8');
 session_start();
 include '../conn.php';
 
-// kalau dipanggil dari fetch(), lebih enak kalau untuk tidak login balas 401
 if (empty($_SESSION['user_id']) && (empty($_SESSION['user']['id']))) {
     http_response_code(401);
     echo json_encode(["success" => false, "message" => "Unauthorized"]);
@@ -16,7 +15,6 @@ if (!empty($_SESSION['user_id'])) {
     $user_id = (int) $_SESSION['user']['id'];
 }
 
-// Support both GET (from detail page: id, qty) and POST (from home page: product_id, qty)
 $product_id = (int)($_POST['product_id'] ?? $_GET['id'] ?? 0);
 $qty = (int)($_POST['qty'] ?? $_GET['qty'] ?? 1);
 
@@ -59,11 +57,10 @@ $resCheck = mysqli_stmt_get_result($stmtCheck);
 $added = 0;
 
 if ($row = mysqli_fetch_assoc($resCheck)) {
-    // sudah ada → update quantity
+
     $current_qty = (int)$row['quantity'];
     $new_qty = $current_qty + $qty_to_add;
     
-    // Jangan melebihi stok
     if ($new_qty > $available_stock) {
         $new_qty = $available_stock;
         $added = $new_qty - $current_qty;

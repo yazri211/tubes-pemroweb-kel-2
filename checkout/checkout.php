@@ -7,7 +7,6 @@ if (!isset($_SESSION['user_id'])) {
 
 include '../conn.php';
 
-// Helper untuk menampilkan halaman "tidak ada produk" (se-tema)
 function no_product_page($msg = "Tidak ada produk yang dipilih.") {
     ?>
     <!DOCTYPE html>
@@ -16,7 +15,8 @@ function no_product_page($msg = "Tidak ada produk yang dipilih.") {
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <title>Tidak Ada Produk</title>
-        <link rel="stylesheet" href="checkout.css">
+        <link rel="icon" type="image/png" href="../assets/logo no wm.png">
+        <link rel="stylesheet" href="checkout.css?v=<?= time() ?>">
     </head>
     <body>
         <div class="card" role="alert" aria-live="assertive">
@@ -30,7 +30,7 @@ function no_product_page($msg = "Tidak ada produk yang dipilih.") {
     exit();
 }
 
-// MODE 1: Single product via query string (beli sekarang dari katalog)
+
 $single_product = null;
 if (isset($_GET['product_id'])) {
     $pid = intval($_GET['product_id']);
@@ -49,7 +49,6 @@ if (isset($_GET['product_id'])) {
     ];
 }
 
-// MODE 2: Cart mode (form posted or cart_ids param)
 $cart_items = [];
 if (!$single_product) {
     $selected = [];
@@ -90,12 +89,10 @@ if (!$single_product) {
     }
 }
 
-// If neither single_product nor cart_items -> show friendly message
 if (!$single_product && count($cart_items) === 0) {
     no_product_page("Tidak ada produk untuk checkout.");
 }
 
-// compute totals
 $total_produk = 0;
 $items_for_render = [];
 if ($single_product) {
@@ -108,7 +105,6 @@ if ($single_product) {
     }
 }
 
-// prepare cart_ids csv for form (if any)
 $cart_ids_csv = '';
 if (!$single_product) {
     $cart_ids = array_map(function($i){ return intval($i['cart_id']); }, $cart_items);
@@ -121,6 +117,7 @@ if (!$single_product) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Checkout - Beauty Shop</title>
+    <link rel="icon" type="image/png" href="../assets/logo no wm.png">
     <link rel="stylesheet" href="checkout.css">
 </head>
 <body>
@@ -135,7 +132,6 @@ if (!$single_product) {
         </div>
     </header>
 
-    <!-- NOTE: removed 'novalidate' so HTML5 required validation aktif -->
     <form action="checkout_process.php" method="POST">
         <?php if ($single_product): ?>
             <input type="hidden" name="mode" value="single">
@@ -149,11 +145,9 @@ if (!$single_product) {
         <input type="hidden" id="baseTotal" value="<?= htmlspecialchars($total_produk) ?>">
 
         <div class="checkout-layout">
-            <!-- LEFT COLUMN -->
             <section>
                 <h3 class="section-title"><span class="emoji">📋</span> Ringkasan Produk</h3>
 
-                <!-- desktop table -->
                 <table class="product-table" role="table" aria-label="Ringkasan produk">
                     <thead>
                         <tr>
@@ -177,7 +171,6 @@ if (!$single_product) {
                     </tbody>
                 </table>
 
-                <!-- mobile cards -->
                 <?php foreach ($items_for_render as $it):
                     $sub = $it['price'] * $it['quantity'];
                 ?>
@@ -230,7 +223,6 @@ if (!$single_product) {
                 </div>
             </section>
 
-            <!-- RIGHT COLUMN / SUMMARY -->
             <aside>
                 <div class="summary-card" aria-label="Rincian biaya" aria-live="polite">
                     <div class="summary-header">

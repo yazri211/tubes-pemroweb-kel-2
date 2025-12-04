@@ -5,10 +5,9 @@ include 'auth_admin.php';
 if (isset($_POST['hapus_user'])) {
     $id = intval($_POST['id']);
     if ($id != $_SESSION['user_id']) {
-        $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $stmt->close();
+        // ambil dulu gambar/avatar jika perlu dihapus (jika ada kolom image tambahkan logika)
+        $sql_delete = "DELETE FROM users WHERE id = $id";
+        mysqli_query($conn, $sql_delete);
         header("Location: admin_users.php?status=deleted");
         exit();
     } else {
@@ -20,14 +19,16 @@ if (isset($_POST['hapus_user'])) {
 // UPDATE USER
 if (isset($_POST['update_user'])) {
     $id = intval($_POST['id']);
-    $username = htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8');
-    $role = htmlspecialchars($_POST['role'], ENT_QUOTES, 'UTF-8');
-    
+    // bersihkan input agar tidak memecah query
+    $username_raw = isset($_POST['username']) ? $_POST['username'] : '';
+    $role_raw = isset($_POST['role']) ? $_POST['role'] : '';
+
+    $username = mysqli_real_escape_string($conn, htmlspecialchars($username_raw, ENT_QUOTES, 'UTF-8'));
+    $role = mysqli_real_escape_string($conn, htmlspecialchars($role_raw, ENT_QUOTES, 'UTF-8'));
+
     if ($username && $role) {
-        $stmt = $conn->prepare("UPDATE users SET username = ?, role = ? WHERE id = ?");
-        $stmt->bind_param("ssi", $username, $role, $id);
-        $stmt->execute();
-        $stmt->close();
+        $sql_update = "UPDATE users SET username = '$username', role = '$role' WHERE id = $id";
+        mysqli_query($conn, $sql_update);
         header("Location: admin_users.php?status=updated");
         exit();
     } else {
@@ -37,7 +38,7 @@ if (isset($_POST['update_user'])) {
 }
 
 // LOAD USER
-$users = $conn->query("SELECT id, username, email, role FROM users ORDER BY id ASC");
+$users = mysqli_query($conn, "SELECT id, username, email, role FROM users ORDER BY id ASC");
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -45,6 +46,7 @@ $users = $conn->query("SELECT id, username, email, role FROM users ORDER BY id A
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kelola User</title>
+    <link rel="icon" type="image/png" href="../assets/logo no wm.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/admin_users.css">
 </head>
@@ -103,7 +105,7 @@ $users = $conn->query("SELECT id, username, email, role FROM users ORDER BY id A
             <span>Daftar User</span>
         </div>
         <div class="user-count-pill">
-            <?php echo $users->num_rows; ?> user terdaftar
+            <?php echo mysqli_num_rows($users); ?> user terdaftar
         </div>
     </div>
 
@@ -132,7 +134,7 @@ $users = $conn->query("SELECT id, username, email, role FROM users ORDER BY id A
                     </tr>
                 </thead>
                 <tbody>
-                <?php while ($u = $users->fetch_assoc()) { 
+                <?php while ($u = mysqli_fetch_assoc($users)) { 
                     $isCurrentUser = ($u['id'] == $_SESSION['user_id']);
                 ?>
                     <tr class="user-row <?php echo $isCurrentUser ? 'current-user-row' : ''; ?>">

@@ -15,7 +15,7 @@ $single_product_mode = ($mode === 'single');
 $items = [];
 
 if ($single_product_mode) {
-    // Handle single product checkout
+
     $product_id = (int)($_POST['product_id'] ?? 0);
     $quantity = (int)($_POST['quantity'] ?? 1);
     
@@ -24,7 +24,6 @@ if ($single_product_mode) {
         exit();
     }
     
-    // Fetch product details
     $sql = "SELECT id, name, price FROM products WHERE id = $product_id LIMIT 1";
     $query = mysqli_query($conn, $sql);
     if (!$query || mysqli_num_rows($query) === 0) {
@@ -40,7 +39,7 @@ if ($single_product_mode) {
         'quantity' => $quantity
     ];
 } else {
-    // MODE 2: Cart mode (dari keranjang)
+
     $cart_ids_arr = [];
     if (isset($_POST['selected']) && is_array($_POST['selected'])) {
         $cart_ids_arr = array_map('intval', $_POST['selected']);
@@ -96,7 +95,6 @@ if (isset($_POST['pengiriman']) && strpos($_POST['pengiriman'], '|') !== false) 
 
 $admin_fee = 5000;
 
-// Calculate total from items array
 $total = 0;
 foreach ($items as $item) {
     $total += $item['price'] * $item['quantity'];
@@ -104,7 +102,6 @@ foreach ($items as $item) {
 
 $grand_total = $total + $ongkir + $admin_fee;
 
-// Simpan ke table `transactions` (PERBAIKAN: sebelumnya `transaction`)
 $metode_e = mysqli_real_escape_string($conn, $metode);
 $alamat_e = mysqli_real_escape_string($conn, $alamat);
 $pengiriman_e = mysqli_real_escape_string($conn, $pengiriman);

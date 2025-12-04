@@ -1,4 +1,4 @@
-/* ====== VARIABLES & RESET ====== */
+
 :root{
     --max-w: 1180px;
     --bg: #f8f8fa;
@@ -383,6 +383,7 @@ main.container{
     height: 100%;
     object-fit: cover;
     display: block;
+    filter: brightness(100%);
 }
 
 .hero-nav {

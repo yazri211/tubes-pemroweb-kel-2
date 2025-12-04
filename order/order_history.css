@@ -1,4 +1,3 @@
-
 :root {
     --bg: #fdf2f8;
     --card-bg: #ffffff;
@@ -11,6 +10,7 @@
     --radius: 20px;
 }
 
+/* Reset */
 * {
     margin: 0;
     padding: 0;
@@ -19,6 +19,8 @@
 
 html, body {
     height: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -26,9 +28,13 @@ body {
     background: var(--bg);
     padding: 18px;
     color: #111827;
+    line-height: 1.35;
+    -webkit-tap-highlight-color: transparent;
 }
 
+/* Container */
 .container {
+    width: 100%;
     max-width: 1100px;
     margin: 0 auto;
     background: var(--card-bg);
@@ -47,6 +53,7 @@ body {
     margin-bottom: 18px;
     padding-bottom: 16px;
     border-bottom: 2px solid var(--pink-light);
+    flex-wrap: wrap; /* allow header to wrap on small screens */
 }
 
 .header-left h1 {
@@ -56,6 +63,7 @@ body {
     display: flex;
     align-items: center;
     gap: 6px;
+    word-break: break-word;
 }
 
 .header-left small {
@@ -67,6 +75,14 @@ body {
 
 .header-left h1 span.icon {
     font-size: 22px;
+}
+
+/* NAV */
+.nav {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap; /* allow buttons to wrap instead of overflowing */
 }
 
 .nav a {
@@ -82,6 +98,7 @@ body {
     align-items: center;
     gap: 6px;
     transition: 0.2s ease;
+    white-space: nowrap;
 }
 
 .nav a:hover {
@@ -90,6 +107,7 @@ body {
     transform: translateY(-1px);
 }
 
+/* SUMMARY PILL */
 .summary-pill {
     margin-top: 4px;
     display: inline-flex;
@@ -102,6 +120,7 @@ body {
     font-size: 12px;
     color: var(--pink-dark);
     font-weight: 600;
+    flex-wrap: wrap;
 }
 
 /* TABLE WRAPPER */
@@ -115,14 +134,17 @@ body {
 .table-scroll {
     width: 100%;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* smoother on iOS */
 }
 
+/* make table naturally fit container; remove forced min-width */
 table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 750px;
+    /* remove min-width to avoid unnecessary horizontal scrolling */
 }
 
+/* Table headers */
 thead {
     background: #fee2f2;
 }
@@ -137,14 +159,18 @@ th {
     border-bottom: 1px solid var(--pink-light);
 }
 
+/* Table cells */
 td {
     padding: 12px 14px;
     border-bottom: 1px solid #f3e8ff;
     font-size: 13px;
     color: #111827;
     vertical-align: middle;
+    word-break: break-word;
+    hyphens: auto;
 }
 
+/* Rows */
 tbody tr {
     transition: background 0.12s ease, transform 0.08s ease;
 }
@@ -162,6 +188,7 @@ tbody tr:hover {
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.04em;
+    white-space: nowrap;
 }
 
 .status-pending,
@@ -187,16 +214,18 @@ tbody tr:hover {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 7px 12px;
+    padding: 8px 14px;
     background: var(--pink-mid);
     color: #fff;
     border-radius: 999px;
     text-decoration: none;
     font-weight: 700;
-    font-size: 12px;
+    font-size: 13px;
     border: none;
     cursor: pointer;
     transition: 0.18s ease;
+    gap: 6px;
+    min-height: 40px; /* improve tap target */
 }
 
 .btn span.icon {
@@ -208,6 +237,7 @@ tbody tr:hover {
     transform: translateY(-1px);
 }
 
+/* Empty state */
 .empty {
     text-align: center;
     padding: 40px 10px 10px;
@@ -226,7 +256,7 @@ tbody tr:hover {
     margin-top: 14px;
 }
 
-/* RESPONSIVE: Tablet & HP */
+/* RESPONSIVE: Tablet & small laptops */
 @media (max-width: 1024px) {
     body {
         padding: 12px;
@@ -245,20 +275,32 @@ tbody tr:hover {
     .table-wrapper {
         border-radius: 14px;
     }
+
+    th, td {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
 }
 
-/* RESPONSIVE: HP (card per transaksi) */
+/* RESPONSIVE: Mobile - convert rows to cards */
 @media (max-width: 768px) {
+    .container {
+        padding: 12px;
+        border-radius: 0; /* full width card feel on smallest screens */
+    }
+
     .table-wrapper {
         background: transparent;
         box-shadow: none;
         border-radius: 0;
+        overflow: visible;
     }
 
     .table-scroll {
         overflow-x: visible;
     }
 
+    /* switch to block card layout */
     table,
     thead,
     tbody,
@@ -282,7 +324,7 @@ tbody tr:hover {
         border-radius: 14px;
         box-shadow: var(--shadow);
         margin-bottom: 12px;
-        padding: 10px 12px;
+        padding: 12px;
         border: 1px solid #ffe4f1;
     }
 
@@ -292,21 +334,26 @@ tbody tr:hover {
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
+        gap: 8px;
     }
 
+    /* label on left */
     td:before {
         content: attr(data-label);
         font-weight: 700;
         color: var(--pink-dark);
         font-size: 12px;
         margin-right: 8px;
-        min-width: 110px;
+        min-width: 90px; /* smaller min-width so labels don't overflow */
         max-width: 50%;
         text-align: left;
+        white-space: normal; /* allow label to wrap */
     }
 
     td[data-label="Aksi"] {
-        margin-top: 4px;
+        margin-top: 8px;
+        flex-direction: column;
+        align-items: stretch;
     }
 
     td[data-label="Aksi"] .btn {
@@ -317,4 +364,43 @@ tbody tr:hover {
     .summary-pill {
         margin-top: 8px;
     }
+
+    .status-badge {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+
+    .btn {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
 }
+
+/* Extra small screens tweak */
+@media (max-width: 420px) {
+    .header-left h1 {
+        font-size: 18px;
+    }
+
+    .nav a {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    td:before {
+        min-width: 80px;
+        font-size: 11px;
+    }
+
+    td {
+        font-size: 13px;
+    }
+
+    .btn {
+        min-height: 44px;
+    }
+}
+
+/* Utility helpers (optional) */
+.text-muted { color: var(--muted); }
+.text-sm { font-size: 12px; }

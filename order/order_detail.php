@@ -59,8 +59,9 @@ while ($r = mysqli_fetch_assoc($items_q)) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Detail Transaksi #<?= htmlspecialchars($order['id']) ?></title>
+    <link rel="icon" type="image/png" href="../assets/logo no wm.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="order_detail.css">
+    <link rel="stylesheet" href="order_detail.css?v=<?= time() ?>">
 </head>
 <body>
 <div class="container" role="main" aria-labelledby="title">

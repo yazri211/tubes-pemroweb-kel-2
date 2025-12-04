@@ -1,4 +1,3 @@
-
 function updateCartCount() {
     fetch("cart/cart_count.php")
         .then(response => response.text())

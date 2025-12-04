@@ -2,7 +2,6 @@
 session_start();
 include '../conn.php';
 
-// If user not logged in, show 0
 if (!isset($_SESSION['user_id'])) {
 	echo 0;
 	exit();

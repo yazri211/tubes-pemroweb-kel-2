@@ -20,7 +20,6 @@ if ($cart_id <= 0) {
     exit();
 }
 
-// Ensure the cart item belongs to the current user, then delete
 $check = mysqli_query($conn, "SELECT user_id FROM `cart` WHERE id = $cart_id");
 if (! $check || mysqli_num_rows($check) == 0) {
     header('Location: cart.php');

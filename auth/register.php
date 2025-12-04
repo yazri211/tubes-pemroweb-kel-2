@@ -57,7 +57,8 @@ if (isset($_POST['register'])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Registrasi - Beauty Shop</title>
-  <link rel="stylesheet" href="css/register.css">
+  <link rel="icon" type="image/png" href="../assets/logo no wm.png">
+  <link rel="stylesheet" href="css/register.css?v=<?= time() ?>">
 </head>
 <body>
   <div class="container">
